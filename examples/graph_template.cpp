@@ -1,4 +1,4 @@
-#include "matplotlibcpp.h"
+#include "../src/matplotlibcpp.hpp"
 #include <iostream>
 #include <vector>
 #include <cstdlib>
