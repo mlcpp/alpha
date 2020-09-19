@@ -1,6 +1,8 @@
 #ifndef _linear_regression_hpp_
 #define _linear_regression_hpp_
 
+#include <all.h>
+
 template <typename T>
 class LinearRegression {
   private:
