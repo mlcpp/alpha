@@ -2,10 +2,10 @@
 #include <iostream>
 #include <istream>
 
-#include "xtensor/xarray.hpp"
-#include "xtensor/xcsv.hpp"
-#include "xtensor/xio.hpp"
-#include "xtensor/xview.hpp"
+#include <xtensor/xarray.hpp>
+#include <xtensor/xcsv.hpp>
+#include <xtensor/xio.hpp>
+#include <xtensor/xview.hpp>
 
 int main() {
     std::ifstream in_file;
