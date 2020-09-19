@@ -5,10 +5,11 @@ template <typename T>
 class LinearRegression{
   private:
   public:
-  void fit();
+  // void fit(Matrix X);
+  void fit(Matrix X, Matrix Y);
   void get_params();
-  void predict();
-  void score();
+  void predict(Matrix X);
+  void score(Matrix X, Matrix Y);
   void set_params();
 };
 
