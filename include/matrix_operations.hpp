@@ -8,7 +8,7 @@ class MatrixOp {
   private:
   public:
     Matrix read_csv(std::string);
-    void concat(std::vector<std::vector<std::string>>);
+    Matrix concat(Matrix, Matrix);
 };
 
 // Method to read a csv file and return a Matrix object

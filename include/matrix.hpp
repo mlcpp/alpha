@@ -7,9 +7,13 @@ class Matrix {
   private:
     std::vector<std::vector<double>> dob_mat;
 
+    Matrix scalar_to_mat(int);
+    Matrix vector_to_mat(Matrix);
+
   public:
     std::vector<std::vector<std::string>> str_mat;
 
+    // Member functions
     std::vector<std::vector<double>> get();
     std::vector<double> get_row(int);
     std::vector<double> get_col(int);
@@ -23,13 +27,23 @@ class Matrix {
     Matrix slice(int, int, int, int);
     Matrix T();
     void to_double();
+
+    // Overloaded Operators
+    Matrix operator+(Matrix);
+    Matrix operator+(int);
+    Matrix operator-(Matrix);
+    Matrix operator-(int);
+    Matrix operator*(Matrix);
+    Matrix operator*(int);
+    Matrix operator/(Matrix);
+    Matrix operator/(int);
 };
 
 // Method to return the matrix in the form of vector
 std::vector<std::vector<double>> Matrix::get() {
     bool error = !dob_mat.empty();
     if (!error)
-        assert(("The Matrix should be first converted to double suing to_double() method", error));
+        assert(("The Matrix should be first converted to double using to_double() method", error));
     return dob_mat;
 }
 
@@ -37,7 +51,7 @@ std::vector<std::vector<double>> Matrix::get() {
 std::vector<double> Matrix::get_row(int row) {
     bool error = !dob_mat.empty();
     if (!error)
-        assert(("The Matrix should be first converted to double suing to_double() method", error));
+        assert(("The Matrix should be first converted to double using to_double() method", error));
 
     std::vector<double> row_vec;
     for (int i = 0; i < col_length(); i++)
@@ -49,7 +63,7 @@ std::vector<double> Matrix::get_row(int row) {
 std::vector<double> Matrix::get_col(int col) {
     bool error = !dob_mat.empty();
     if (!error)
-        assert(("The Matrix should be first converted to double suing to_double() method", error));
+        assert(("The Matrix should be first converted to double using to_double() method", error));
 
     std::vector<double> col_vec;
     for (int i = 0; i < row_length(); i++)
@@ -153,6 +167,314 @@ void Matrix::to_double() {
         dob_mat.push_back(row);
         row.clear();
     }
+}
+
+// Operator overloading functions
+
+Matrix Matrix::operator+(Matrix mat) {
+    bool error1 = ((!dob_mat.empty()) && (!mat.dob_mat.empty()));
+    if (!error1)
+        assert(("The Matrix objects should be first converted to double using to_double() method",
+                error1));
+
+    if ((row_length() == mat.row_length()) && (col_length() == mat.col_length())) {
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] + mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else if ((row_length() == mat.row_length()) && (mat.col_length() == 1)) {
+        mat = vector_to_mat(mat);
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] + mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else if ((col_length() == mat.col_length()) && (mat.row_length() == 1)) {
+        mat = vector_to_mat(mat);
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] + mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else {
+        assert(("The Matrix objects should be of compatible dimensions", false));
+    }
+}
+
+Matrix Matrix::operator+(int val) {
+    bool error = !dob_mat.empty();
+    if (!error)
+        assert(("The Matrix should be first converted to double using to_double() method", error));
+
+    Matrix mat_val = scalar_to_mat(val);
+
+    Matrix result;
+    std::vector<std::string> row;
+
+    for (int i = 0; i < row_length(); i++) {
+        for (int j = 0; j < col_length(); j++)
+            row.push_back(std::to_string(dob_mat[i][j] + mat_val.dob_mat[i][j]));
+        result.str_mat.push_back(row);
+        row.clear();
+    }
+    result.to_double();
+    return result;
+}
+
+Matrix Matrix::operator-(Matrix mat) {
+    bool error1 = ((!dob_mat.empty()) && (!mat.dob_mat.empty()));
+    if (!error1)
+        assert(("The Matrix objects should be first converted to double using to_double() method",
+                error1));
+
+    if ((row_length() == mat.row_length()) && (col_length() == mat.col_length())) {
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] - mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else if ((row_length() == mat.row_length()) && (mat.col_length() == 1)) {
+        mat = vector_to_mat(mat);
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] - mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else if ((col_length() == mat.col_length()) && (mat.row_length() == 1)) {
+        mat = vector_to_mat(mat);
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] - mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else {
+        assert(("The Matrix objects should be of compatible dimensions", false));
+    }
+}
+
+Matrix Matrix::operator-(int val) {
+    bool error = !dob_mat.empty();
+    if (!error)
+        assert(("The Matrix should be first converted to double using to_double() method", error));
+
+    Matrix mat_val = scalar_to_mat(val);
+
+    Matrix result;
+    std::vector<std::string> row;
+
+    for (int i = 0; i < row_length(); i++) {
+        for (int j = 0; j < col_length(); j++)
+            row.push_back(std::to_string(dob_mat[i][j] - mat_val.dob_mat[i][j]));
+        result.str_mat.push_back(row);
+        row.clear();
+    }
+    result.to_double();
+    return result;
+}
+
+Matrix Matrix::operator*(Matrix mat) {
+    bool error1 = ((!dob_mat.empty()) && (!mat.dob_mat.empty()));
+    if (!error1)
+        assert(("The Matrix objects should be first converted to double using to_double() method",
+                error1));
+
+    if ((row_length() == mat.row_length()) && (col_length() == mat.col_length())) {
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] * mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else if ((row_length() == mat.row_length()) && (mat.col_length() == 1)) {
+        mat = vector_to_mat(mat);
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] * mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else if ((col_length() == mat.col_length()) && (mat.row_length() == 1)) {
+        mat = vector_to_mat(mat);
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] * mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else {
+        assert(("The Matrix objects should be of compatible dimensions", false));
+    }
+}
+
+Matrix Matrix::operator*(int val) {
+    bool error = !dob_mat.empty();
+    if (!error)
+        assert(("The Matrix should be first converted to double using to_double() method", error));
+
+    Matrix mat_val = scalar_to_mat(val);
+
+    Matrix result;
+    std::vector<std::string> row;
+
+    for (int i = 0; i < row_length(); i++) {
+        for (int j = 0; j < col_length(); j++)
+            row.push_back(std::to_string(dob_mat[i][j] * mat_val.dob_mat[i][j]));
+        result.str_mat.push_back(row);
+        row.clear();
+    }
+    result.to_double();
+    return result;
+}
+
+Matrix Matrix::operator/(Matrix mat) {
+    bool error1 = ((!dob_mat.empty()) && (!mat.dob_mat.empty()));
+    if (!error1)
+        assert(("The Matrix objects should be first converted to double using to_double() method",
+                error1));
+
+    if ((row_length() == mat.row_length()) && (col_length() == mat.col_length())) {
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] / mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else if ((row_length() == mat.row_length()) && (mat.col_length() == 1)) {
+        mat = vector_to_mat(mat);
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] / mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else if ((col_length() == mat.col_length()) && (mat.row_length() == 1)) {
+        mat = vector_to_mat(mat);
+        Matrix result;
+        std::vector<std::string> row;
+
+        for (int i = 0; i < row_length(); i++) {
+            for (int j = 0; j < col_length(); j++)
+                row.push_back(std::to_string(dob_mat[i][j] / mat.dob_mat[i][j]));
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+        result.to_double();
+        return result;
+    } else {
+        assert(("The Matrix objects should be of compatible dimensions", false));
+    }
+}
+
+Matrix Matrix::operator/(int val) {
+    bool error = !dob_mat.empty();
+    if (!error)
+        assert(("The Matrix should be first converted to double using to_double() method", error));
+
+    Matrix mat_val = scalar_to_mat(val);
+
+    Matrix result;
+    std::vector<std::string> row;
+
+    for (int i = 0; i < row_length(); i++) {
+        for (int j = 0; j < col_length(); j++)
+            row.push_back(std::to_string(dob_mat[i][j] / mat_val.dob_mat[i][j]));
+        result.str_mat.push_back(row);
+        row.clear();
+    }
+    result.to_double();
+    return result;
+}
+
+// Helper functions
+
+Matrix Matrix::scalar_to_mat(int val) {
+    Matrix result;
+
+    std::vector<std::string> row(col_length(), std::to_string(val));
+    std::vector<std::vector<std::string>> mat(row_length(), row);
+    result.str_mat = mat;
+    result.to_double();
+    return result;
+}
+
+Matrix Matrix::vector_to_mat(Matrix vec) {
+    Matrix result;
+    std::vector<std::string> row;
+    if (row_length() == vec.row_length()) {
+        for (int i = 0; i < row_length(); i++) {
+            row.assign(col_length(), vec.str_mat[i][0]);
+            result.str_mat.push_back(row);
+            row.clear();
+        }
+    } else if (col_length() == vec.col_length()) {
+        for (int i = 0; i < row_length(); i++) {
+            result.str_mat.push_back(vec.str_mat[0]);
+        }
+    }
+    result.to_double();
+    return result;
 }
 
 #endif /* _matrix_hpp_ */
