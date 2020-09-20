@@ -2,6 +2,7 @@
 #include <matrix_operations.hpp>
 
 /* Example program
+
 Read a csv file and get a Matrix object.
 Slice the Matrix object to remove the rows and columns which cannot be converted to double.
 The sliced Matrix object is then converted to double and printed to the console.

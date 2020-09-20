@@ -6,8 +6,6 @@
 
 class MatrixOp {
   private:
-    Matrix obj;
-
   public:
     Matrix read_csv(std::string);
     void concat(std::vector<std::vector<std::string>>);
@@ -15,6 +13,7 @@ class MatrixOp {
 
 // Method to read a csv file and return a Matrix object
 Matrix MatrixOp::read_csv(std::string filename) {
+    Matrix mat;
     std::ifstream file(filename);
     std::string line, cell;
     std::vector<std::string> cells;
@@ -25,11 +24,11 @@ Matrix MatrixOp::read_csv(std::string filename) {
         while (std::getline(ss, cell, delim)) {
             cells.push_back(cell);
         }
-        obj.str_mat.push_back(cells);
+        mat.str_mat.push_back(cells);
         cells.clear();
     }
 
-    return obj;
+    return mat;
 }
 
 #endif /* _matrix_operations_hpp_ */

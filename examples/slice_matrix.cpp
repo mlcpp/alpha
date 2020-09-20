@@ -2,6 +2,7 @@
 #include <matrix_operations.hpp>
 
 /* Example program
+
 Read a csv file and get a Matrix object.
 Slice the Matrix object.
 The sliced Matrix object is then printed to the console.

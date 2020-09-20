@@ -3,13 +3,14 @@
 
 /* Example program
 
-Read a csv file and get a Matrix object
-The Matrix object is then printed to the console.
+Read a csv file and get a Matrix object.
+Get the Transpose of the Matrix object and then print it.
 */
 int main() {
     MatrixOp ops;
     Matrix mat = ops.read_csv("./datasets/boston/boston.csv");
-    mat.print();
+    Matrix mat_transpose = mat.T();
+    mat_transpose.print();
 
     return 0;
 }
