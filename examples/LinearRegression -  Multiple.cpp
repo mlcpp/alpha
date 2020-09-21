@@ -16,7 +16,7 @@ int main(){
     Matrix X_test = X.second;
 
     // Split the targets into training/testing sets
-    pair <Matrix, Matrix> Y = split_test_train(mat);
+    pair <Matrix, Matrix> Y = split_test_train(mat[1]);
     Matrix Y_train = Y.first;
     Matrix Y_test = Y.second;
 
@@ -53,7 +53,7 @@ int main(){
     // Save the image (file format is determined by the extension)
     plt::save("./basic.png");
 
-    matplotlibcpp::show();
+    plt::show();
 
     return 0;
 }
