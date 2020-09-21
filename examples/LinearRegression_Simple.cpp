@@ -1,12 +1,13 @@
 // Header files
 #include <LinearRegression.hpp>
-using mathplotlibcpp as plt;
+#include <matplotlibcpp.hpp>
+namespace plt = matplotlibcpp;
 
 int main(){
-
+ 
     // Load the datasets
     Matrix mat = read_csv("./datasets/boston/diabetes.csv");
-
+/*
     // Use only one feature
     mat = mat.slice();
 
@@ -19,11 +20,14 @@ int main(){
     pair <Matrix, Matrix> Y = split_test_train(mat[1]);
     Matrix Y_train = Y.first;
     Matrix Y_test = Y.second;
-
+ */
     // Create linear regression object
-    LinearRegression regr{};
+    LinearRegression regr;
+    regr.get_params();
+    regr.set_params(false, false, false,10, false, 1);
+    regr.get_params();
 
-    // Train the model using the training set
+/*     // Train the model using the training set
     regr.fit(X_train, Y_train);
 
     // Make prediction using the testing set
@@ -31,7 +35,7 @@ int main(){
 
     // Print coefficients
     Matrix coef = regr.coef_;
-    coef.view();
+    coef.print();
 
     // The mean squared error
     std :: cout << mean_squared_error(diabetes_y_test, diabetes_y_pred);
@@ -51,9 +55,9 @@ int main(){
     // Enable legend.
     plt::legend();
     // Save the image (file format is determined by the extension)
-    plt::save("./basic.png");
+    plt::save("./build/LinearRegression.png");
 
     plt::show();
-
+ */
     return 0;
 }

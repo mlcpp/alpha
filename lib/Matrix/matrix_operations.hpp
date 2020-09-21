@@ -8,7 +8,7 @@ class MatrixOp {
   public:
     Matrix concat(Matrix, Matrix, std::string);
     Matrix matrix_mult(Matrix, Matrix);
-};
+}ops;
 
 // Method to concatenate/join two Matrix objects
 Matrix MatrixOp::concat(Matrix mat1, Matrix mat2, std::string type) {
