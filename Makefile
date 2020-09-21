@@ -1,11 +1,10 @@
 .PHONY: all clean
 
 CPP = g++ 
-ALPHA_FLAGS = -Isrc/
+ALPHA_FLAGS = -Iinclude/
 MATPLOTLIBCPP_FLAGS = -I/usr/include/python3.8 -I/usr/lib/python3.8 -lpython3.8
-NUMCPP_FLAGS = 
-BOOST_FLAGS =
-CPP_FLAGS = -std=c++11 -g -o
+LIB_FLAGS = -Ilib/
+CPP_FLAGS = -std=c++14 -g -o
 
 # create build directory
 CREATE_DIR : $(shell mkdir -p ./build)
@@ -13,8 +12,7 @@ CREATE_DIR : $(shell mkdir -p ./build)
 # compile /examples dir with options to compile single
 %: $(CREATE_DIR) ./examples/%.cpp
 	@# @echo compiling $@.cpp
-	@$(CPP) $^ $(ALPHA_FLAGS) $(MATPLOTLIBCPP_FLAGS) $(NUMCPP_FLAGS) \
-	$(BOOST_FLAGS) $(CPP_FLAGS) ./build/$@
+	@$(CPP) $(LIB_FLAGS) $^ $(ALPHA_FLAGS) $(MATPLOTLIBCPP_FLAGS)  $(CPP_FLAGS) ./build/$@
 	@echo executable ./build/$@ created. 
 
 
