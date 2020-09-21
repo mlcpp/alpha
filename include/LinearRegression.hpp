@@ -7,7 +7,7 @@ class LinearRegression{
 	private:
 		bool fit_intercept = true, normalize=false,  copy_X = true, ols = false;
 		int n_jobs = 1, epochs = 1000;
-		Matrix B;
+		Matrix B, Y_pred;
 	public:
 /* 	LinearRegression(){
 		fit_intercept = true;
@@ -28,7 +28,7 @@ class LinearRegression{
 	Matrix fit(Matrix X, Matrix Y);
 	void get_params(); // returns a map //prints json format
 	void predict(Matrix X);
-	void score(Matrix X, Matrix Y);
+	Matrix score(Matrix X, Matrix Y);
 	void set_params(bool fit_intercept = true, bool normalize = false, bool copy_X = true, int n_jobs = 1, bool ols = false, int epochs = 1000);
 };
 
@@ -48,9 +48,8 @@ Matrix LinearRegression::fit(Matrix X, Matrix Y){ //estimate coefficients
 	else{
 		double learning_rate = 0.001;
 		for ( int i = 1 ; i <= epochs ; i++ ){
-			Matrix x_transpose_x = ops.matrix_mult(X.T(), X);
-			Matrix x_transpose_y = ops.matrix_mult(X.T(), Y);
-			B = B - (ops.matrix_mult(Y.T()-Y, X))*(learning_rate);
+			Y_pred.ins();
+			B = B - (ops.matrix_mult(Y_pred - Y, X))*(learning_rate);
 		}
 		return B;
 	}
@@ -70,6 +69,18 @@ void LinearRegression::get_params(){
 	std::cout << "]" <<std::endl;
 }
 
+Matrix LinearRegression::score(Matrix X, Matrix Y){ 
+	Matrix score.init_zero();
+	/* 	
+	Matrix residual_sum_of_squares = ops.matrix_mult((Y_pred.to_double() - Y.to_double()), (Y_pred.to_double() - Y.to_double()).T());
+	Matrix total_sum_of_squares = ops.matrix_mult((Y.to_double().mean() - Y), (Y.to_double().mean() - Y.to_double()).T());
+	 */
+	Matrix residual_sum_of_squares = ops.matrix_mult((Y_pred - Y), (Y_pred - Y).T());
+	Matrix total_sum_of_squares = ops.matrix_mult((Y.mean() - Y), (Y.mean() - Y).T());
+	score.ins(1 - (residual_sum_of_squares/total_sum_of_squares));
+	return score;
+}
+
 void LinearRegression::set_params(bool fit_intercept, bool normalize, bool copy_X, int n_jobs, bool ols, int epochs){
 		this->fit_intercept = fit_intercept;
 		this->normalize = normalize;
@@ -78,5 +89,7 @@ void LinearRegression::set_params(bool fit_intercept, bool normalize, bool copy_
 		this->n_jobs = n_jobs;
 		this->epochs = epochs;
 }
+
+
 
 #endif /* _linear_regression_hpp_ */
