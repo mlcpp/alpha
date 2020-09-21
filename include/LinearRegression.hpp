@@ -10,7 +10,7 @@ class LinearRegression{
 		int n_jobs = 1, epochs = 1000;
 		Matrix B, B_dash;
 	public:
-	void fit(Matrix X, Matrix Y);
+	Matrix fit(Matrix X, Matrix Y);
 	void get_params(); // returns a map //prints json format
 	void predict(Matrix X);
 	void score(Matrix X, Matrix Y);
@@ -18,8 +18,6 @@ class LinearRegression{
 };
 
 Matrix LinearRegression::fit(Matrix X, Matrix Y){ //estimate coefficients
-/* 
-
 	// add bias factor
 	
 	//ols
@@ -31,16 +29,16 @@ Matrix LinearRegression::fit(Matrix X, Matrix Y){ //estimate coefficients
 	}
 
 	// gradient descent
-		else{
+	else{
 		double learning_rate = 0.001;
 		for ( int i = 1 ; i <= epochs ; i++ ){
-			Matrix x_transpose_x = ops.matrix_mul(X.transpose(), X);
-			Matrix x_transpose_y = ops.matrix_mul(X.transpose(), Y);
-			B = B - (2/epochs)*(learning_rate)*(ops.matrix_mul(x_transpose_x, B) - x_transpose_y);
-			B_dash = B_dash - (learning_rate)*()
+			Matrix x_transpose_x = ops.matrix_mul(X.T(), X);
+			Matrix x_transpose_y = ops.matrix_mul(X.T(), Y);
+			B = B - (learning_rate)*(ops.matrix_mul(Y.T()-Y, X);
 		}
-		return std::make_pair(B, B_dash); 
-*/
+		return B;
+	}
+
 
 }
 
