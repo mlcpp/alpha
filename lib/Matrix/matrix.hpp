@@ -1,7 +1,12 @@
 #ifndef _matrix_hpp_
 #define _matrix_hpp_
 
-#include <all.hpp>
+#include <assert.h>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 class Matrix {
   private:
