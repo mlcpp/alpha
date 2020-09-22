@@ -1,7 +1,7 @@
 .PHONY: all clean
 
 CPP = g++ 
-ALPHA_FLAGS = -Iinclude/
+ALPHA_FLAGS = -Iinclude/ 
 LIB_FLAGS = -Ilib/ -Ilib/Matrix/ 
 MATPLOTLIBCPP_FLAGS = -I/usr/include/python3.8 -I/usr/lib/python3.8 -lpython3.8
 CPP_FLAGS = -std=c++14 -g -o

@@ -1,7 +1,6 @@
 #ifndef _matrix_operations_hpp_
 #define _matrix_operations_hpp_
 
-#include <all.hpp>
 #include <matrix.hpp>
 
 class MatrixOp {
@@ -9,7 +8,7 @@ class MatrixOp {
   public:
     Matrix concat(Matrix, Matrix, std::string);
     Matrix matrix_mult(Matrix, Matrix);
-};
+}ops;
 
 // Method to concatenate/join two Matrix objects
 Matrix MatrixOp::concat(Matrix mat1, Matrix mat2, std::string type) {
