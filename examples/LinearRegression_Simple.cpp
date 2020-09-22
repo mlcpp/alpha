@@ -10,6 +10,7 @@ int main(){
 /*
     // Use only one feature
     mat = mat.slice();
+    mat.to_double();
 
     // Split the data into training/testing sets
     pair <Matrix, Matrix> X = split_test_train(mat);
