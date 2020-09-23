@@ -4,7 +4,7 @@ CPP = g++
 ALPHA_FLAGS = -Iinclude/ 
 LIB_FLAGS = -Ilib/ -Ilib/Matrix/ 
 MATPLOTLIBCPP_FLAGS = -I/usr/include/python3.8 -I/usr/lib/python3.8 -lpython3.8
-CPP_FLAGS = -std=c++14 -g -o
+CPP_FLAGS = -std=c++17 -g -o
 
 # create build directory
 CREATE_DIR : $(shell mkdir -p ./build)
