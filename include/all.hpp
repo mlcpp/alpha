@@ -4,5 +4,8 @@
 #include <Matrix.hpp>
 #include <assert.h>
 #include <iostream>
+#include <stdlib.h>
+#include <tuple>
+#include <vector>
 
 #endif /* _all_h_ */
