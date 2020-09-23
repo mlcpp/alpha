@@ -12,8 +12,6 @@ class Matrix {
   private:
     Matrix scalar_to_mat(double);
     Matrix vector_to_mat(Matrix);
-    Matrix cofactor(Matrix, int, int);
-    Matrix adjoint();
 
   public:
     std::vector<std::vector<double>> double_mat;
@@ -33,8 +31,6 @@ class Matrix {
     void view(int, int, int, int);
     Matrix slice(int, int, int, int);
     Matrix T();
-    double determinant(int);
-    Matrix inverse();
     void to_double();
     void to_string();
 
@@ -47,6 +43,7 @@ class Matrix {
     Matrix operator*(double);
     Matrix operator/(Matrix);
     Matrix operator/(double);
+    double &operator()(int, int);
 };
 
 // Method to return the matrix in the form of vector
@@ -191,46 +188,6 @@ void Matrix::to_string() {
         row.clear();
     }
     if_double = true;
-}
-
-// Method to calculate the Determinant of a Matrix
-double Matrix::determinant(int n) {
-    if (row_length() != col_length())
-        assert(("The Matrix must be a square matrix", false));
-
-    double D = 0;
-    if (n == 1)
-        return double_mat[0][0];
-
-    Matrix temp;
-    for (int i = 0; i < n; i++) {
-        std::vector<double> row;
-        for (int j = 0; j < n; j++) {
-            row.push_back(0);
-        }
-        temp.double_mat.push_back(row);
-    }
-    temp.to_string();
-    int sign = 1;
-    for (int f = 0; f < n; f++) {
-        temp = cofactor(temp, 0, f);
-        D += sign * double_mat[0][f] * temp.determinant(n - 1);
-        sign = -sign;
-    }
-    return D;
-}
-
-// Method to calculate the Inverse of a Matrix
-Matrix Matrix::inverse() {
-    if (row_length() != col_length())
-        assert(("The Matrix must be a square matrix", false));
-    double det = determinant(col_length());
-    if (det == 0)
-        assert(("The Matrix is singular", false));
-
-    Matrix adj = adjoint();
-    Matrix result = adj / det;
-    return result;
 }
 
 // Operator overloading functions
@@ -511,7 +468,19 @@ Matrix Matrix::operator/(double val) {
     return result;
 }
 
-// Helper functions
+double &Matrix::operator()(int row, int col) {
+    bool error1 = if_double;
+    if (!error1)
+        assert(("The Matrix should be first converted to double using to_double() method", error1));
+    bool error2 = (((row >= 0) && (row < row_length())) && ((col >= 0) && (col < col_length())));
+    if (!error2)
+        assert(("Index is out of range", false));
+
+    to_string();
+    return double_mat[row][col];
+}
+
+// Helper methods
 
 Matrix Matrix::scalar_to_mat(double val) {
     Matrix result;
@@ -537,61 +506,6 @@ Matrix Matrix::vector_to_mat(Matrix vec) {
         }
     }
     result.to_double();
-    return result;
-}
-
-// Helper method to calculate cofactor
-Matrix Matrix::cofactor(Matrix temp, int p, int q) {
-    int i = 0, j = 0;
-    for (int row = 0; row < row_length(); row++) {
-        for (int col = 0; col < col_length(); col++) {
-            if (row != p && col != q) {
-                temp.double_mat[i][j++] = double_mat[row][col];
-                if (j == col_length() - 1) {
-                    j = 0;
-                    i++;
-                }
-            }
-        }
-    }
-    temp.to_string();
-    return temp;
-}
-
-// Helper method to calculate the Adjoint of a Matrix
-Matrix Matrix::adjoint() {
-    Matrix result;
-    for (int i = 0; i < row_length(); i++) {
-        std::vector<double> row;
-        for (int j = 0; j < col_length(); j++) {
-            row.push_back(0);
-        }
-        result.double_mat.push_back(row);
-    }
-    if (col_length() == 1) {
-        result.double_mat[0][0] = 1;
-        result.to_string();
-        return result;
-    }
-
-    int sign = 1;
-    Matrix temp;
-    for (int i = 0; i < row_length(); i++) {
-        std::vector<double> row;
-        for (int j = 0; j < col_length(); j++) {
-            row.push_back(0);
-        }
-        temp.double_mat.push_back(row);
-    }
-    temp.to_string();
-    for (int i = 0; i < row_length(); i++) {
-        for (int j = 0; j < col_length(); j++) {
-            temp = cofactor(temp, i, j);
-            sign = ((i + j) % 2 == 0) ? 1 : -1;
-            result.double_mat[j][i] = (sign) * (temp.determinant(temp.col_length() - 1));
-        }
-    }
-    result.to_string();
     return result;
 }
 
