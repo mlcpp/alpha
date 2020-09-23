@@ -6,14 +6,14 @@ namespace plt = matplotlibcpp;
 int main(){
  
     // Load the datasets
-    Matrix mat = read_csv("./datasets/boston/diabetes.csv");
-/*
+    Matrix mat = read_csv("./datasets/diabetes/diabetes.csv");
+
     // Use only one feature
     mat = mat.slice();
     mat.to_double();
 
     // Split the data into training/testing sets
-    pair <Matrix, Matrix> X = split_test_train(mat);
+    std::pair <Matrix, Matrix> X = split_test_train(mat);
     Matrix X_train = X.first;
     Matrix X_test = X.second;
 
@@ -21,14 +21,14 @@ int main(){
     pair <Matrix, Matrix> Y = split_test_train(mat[1]);
     Matrix Y_train = Y.first;
     Matrix Y_test = Y.second;
- */
+
     // Create linear regression object
     LinearRegression regr;
     regr.get_params();
     regr.set_params(false, false, false,10, false, 1);
     regr.get_params();
 
-/*     // Train the model using the training set
+    // Train the model using the training set
     regr.fit(X_train, Y_train);
 
     // Make prediction using the testing set
@@ -59,6 +59,6 @@ int main(){
     plt::save("./build/LinearRegression.png");
 
     plt::show();
- */
+
     return 0;
 }
