@@ -37,11 +37,11 @@ void LinearRegression::fit(Matrix X, Matrix Y) {
         Y.T();
     }
 
-    if (normalize)
-        X = preprocessing.normalize(X, "column");
-
     bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
     assert(("Wrong dimensions.", expr));
+
+    if (normalize)
+        X = preprocessing.normalize(X, "column");
 
     // Initializing parameters with zero
     B = matrix.zeros(X.col_length() + 1, 1);
@@ -89,8 +89,8 @@ Matrix LinearRegression::predict(Matrix X) {
     // Add a column of 1's to X
     Matrix temp_x = matrix.ones(X.row_length(), 1);
     X = matrix.concat(temp_x, X, "column");
-    Matrix Y_pred;
-    Y_pred = matrix.matmul(X, B);
+
+    Matrix Y_pred = matrix.matmul(X, B);
     return Y_pred;
 }
 

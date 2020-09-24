@@ -2,6 +2,7 @@
 #define _ridge_hpp_
 
 #include <all.hpp>
+#include <preprocessing.hpp>
 
 class Ridge {
   private:
@@ -13,7 +14,7 @@ class Ridge {
     Matrix B;
 
     Ridge(double, bool, int, double);
-    Matrix fit(Matrix, Matrix);
+    void fit(Matrix, Matrix);
     void get_params();
     Matrix predict(Matrix);
     double score(Matrix, Matrix);
@@ -29,8 +30,7 @@ Ridge::Ridge(double alpha = 1, bool normalize = false, int epochs = 1000, double
 }
 
 // Method to fit the Ridge model
-Matrix Ridge::fit(Matrix X, Matrix Y) {
-
+void Ridge::fit(Matrix X, Matrix Y) {
     if ((X.row_length() != Y.row_length()) && (X.col_length() == Y.col_length())) {
         X.T();
         Y.T();
@@ -38,6 +38,9 @@ Matrix Ridge::fit(Matrix X, Matrix Y) {
 
     bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
     assert(("Wrong dimensions.", expr));
+
+    if (normalize)
+        X = preprocessing.normalize(X, "column");
 
     // Initializing parameters with zero
     B = matrix.zeros(X.col_length() + 1, 1);
@@ -58,8 +61,6 @@ Matrix Ridge::fit(Matrix X, Matrix Y) {
         B = B + (temp * (alpha / m * lr));
     }
     if_fit = true;
-
-    return B;
 }
 
 // Method to print the Ridge object parameters in json format
@@ -77,21 +78,24 @@ void Ridge::get_params() {
 Matrix Ridge::predict(Matrix X) {
     assert(("Fit the model before predicting.", if_fit));
 
+    if (normalize)
+        X = preprocessing.normalize(X, "column");
+
     // Add a column of 1's to X
     Matrix temp_x = matrix.ones(X.row_length(), 1);
     X = matrix.concat(temp_x, X, "column");
-    Matrix Y_pred;
-    Y_pred = matrix.matmul(X, B);
+
+    Matrix Y_pred = matrix.matmul(X, B);
     return Y_pred;
 }
 
 // Method to calculate the score of the predictions
 double Ridge::score(Matrix Y_pred, Matrix Y) {
-    double score = 0.00;
-    Matrix residual_sum_of_squares = matrix.matmul((Y_pred - Y).T(), (Y_pred - Y));
-    Matrix total_sum_of_squares = matrix.matmul((Y - (matrix.mean(Y, "column"))(0, 0)).T(),
-                                                (Y - (matrix.mean(Y, "column"))(0, 0)));
-    score = (1 - (residual_sum_of_squares(0, 0) / total_sum_of_squares(0, 0)));
+    double Y_mean = ((matrix.mean(Y, "column"))(0, 0));
+    double residual_sum_of_squares = (matrix.matmul((Y_pred - Y).T(), (Y_pred - Y)))(0, 0);
+    double total_sum_of_squares = (matrix.matmul((Y - Y_mean).T(), (Y - Y_mean)))(0, 0);
+    double score = (1 - (residual_sum_of_squares / total_sum_of_squares));
+
     return score;
 }
 
