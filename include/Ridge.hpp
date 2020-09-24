@@ -1,37 +1,36 @@
-#ifndef _linear_regression_hpp_
-#define _linear_regression_hpp_
+#ifndef _ridge_hpp_
+#define _ridge_hpp_
 
 #include <all.hpp>
 #include <preprocessing.hpp>
 
-class LinearRegression {
+class Ridge {
   private:
-    bool normalize, ols, if_fit = false;
+    bool normalize, if_fit = false;
     int epochs;
-    double lr;
+    double lr, alpha;
 
   public:
     Matrix B;
 
-    LinearRegression(bool, bool, int, double);
+    Ridge(double, bool, int, double);
     void fit(Matrix, Matrix);
     void get_params();
     Matrix predict(Matrix);
     double score(Matrix, Matrix);
-    void set_params(bool, bool, int, double);
+    void set_params(double, bool, int, double);
 };
 
 // Constructor
-LinearRegression::LinearRegression(bool normalize = false, bool ols = false, int epochs = 1000,
-                                   double lr = 0.001) {
+Ridge::Ridge(double alpha = 1, bool normalize = false, int epochs = 1000, double lr = 0.001) {
+    this->alpha = alpha;
     this->normalize = normalize;
-    this->ols = ols;
     this->epochs = epochs;
     this->lr = lr;
 }
 
-// Method to fit the Linear Regression model
-void LinearRegression::fit(Matrix X, Matrix Y) {
+// Method to fit the Ridge model
+void Ridge::fit(Matrix X, Matrix Y) {
     if ((X.row_length() != Y.row_length()) && (X.col_length() == Y.col_length())) {
         X.T();
         Y.T();
@@ -49,38 +48,34 @@ void LinearRegression::fit(Matrix X, Matrix Y) {
     // Add a column of 1's to X
     Matrix temp_x = matrix.ones(X.row_length(), 1);
     X = matrix.concat(temp_x, X, "column");
+    int m = X.row_length();
+    Matrix temp;
+    Matrix Y_pred;
 
-    // ols
-    if (ols) {
-        Matrix C = matrix.inverse((matrix.matmul(X.T(), X)));
-        Matrix D = matrix.matmul(X.T(), Y);
-        B = matrix.matmul(C, D);
-    }
     // gradient descent
-    else {
-        Matrix Y_pred;
-        int m = X.row_length();
-        for (int i = 1; i <= epochs; i++) {
-            Y_pred = matrix.matmul(X, B);
-            B = B - (matrix.matmul(X.T(), Y_pred - Y)) * (lr / m);
-        }
+    for (int i = 1; i <= epochs; i++) {
+        temp = matrix.concat(B.slice(0, B.row_length(), 0, 1),
+                             matrix.zeros(B.row_length(), B.col_length() - 1), "column");
+        Y_pred = matrix.matmul(X, B);
+        B = B - ((matrix.matmul(X.T(), Y_pred - Y) + (B * alpha)) * (lr / m));
+        B = B + (temp * (alpha / m * lr));
     }
     if_fit = true;
 }
 
-// Method to print the Linear Regression object parameters in json format
-void LinearRegression::get_params() {
+// Method to print the Ridge object parameters in json format
+void Ridge::get_params() {
     std::cout << std::boolalpha;
     std::cout << "[" << std::endl;
+    std::cout << "\t \"alpha\": \"" << alpha << "\"," << std::endl;
     std::cout << "\t \"normalize\": \"" << normalize << "\"," << std::endl;
-    std::cout << "\t \"ols\": \"" << ols << "\"," << std::endl;
     std::cout << "\t \"epochs\": \"" << epochs << "\"," << std::endl;
     std::cout << "\t \"lr\": \"" << lr << "\"" << std::endl;
     std::cout << "]" << std::endl;
 }
 
-// Method to predict using the Linear Regression model
-Matrix LinearRegression::predict(Matrix X) {
+// Method to predict using the Ridge model
+Matrix Ridge::predict(Matrix X) {
     assert(("Fit the model before predicting.", if_fit));
 
     if (normalize)
@@ -95,7 +90,7 @@ Matrix LinearRegression::predict(Matrix X) {
 }
 
 // Method to calculate the score of the predictions
-double LinearRegression::score(Matrix Y_pred, Matrix Y) {
+double Ridge::score(Matrix Y_pred, Matrix Y) {
     double Y_mean = ((matrix.mean(Y, "column"))(0, 0));
     double residual_sum_of_squares = (matrix.matmul((Y_pred - Y).T(), (Y_pred - Y)))(0, 0);
     double total_sum_of_squares = (matrix.matmul((Y - Y_mean).T(), (Y - Y_mean)))(0, 0);
@@ -104,13 +99,13 @@ double LinearRegression::score(Matrix Y_pred, Matrix Y) {
     return score;
 }
 
-// Method to set the Linear Regression object parameters
-void LinearRegression::set_params(bool normalize = false, bool ols = false, int epochs = 1000,
-                                  double lr = 0.001) {
+// Method to set the Ridge object parameters
+void Ridge::set_params(double alpha = 1, bool normalize = false, int epochs = 1000,
+                       double lr = 0.001) {
+    this->alpha = alpha;
     this->normalize = normalize;
-    this->ols = ols;
     this->epochs = epochs;
     this->lr = lr;
 }
 
-#endif /* _linear_regression_hpp_ */
+#endif /* _ridge_hpp_ */
