@@ -55,7 +55,7 @@ void Ridge::fit(Matrix X, Matrix Y) {
     // gradient descent
     for (int i = 1; i <= epochs; i++) {
         temp = matrix.concat(B.slice(0, B.row_length(), 0, 1),
-                             matrix.zeros(B.row_length(), B.col_length() - 1), "row");
+                             matrix.zeros(B.row_length(), B.col_length() - 1), "column");
         Y_pred = matrix.matmul(X, B);
         B = B - ((matrix.matmul(X.T(), Y_pred - Y) + (B * alpha)) * (lr / m));
         B = B + (temp * (alpha / m * lr));
