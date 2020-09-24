@@ -55,7 +55,7 @@ Matrix Ridge::fit(Matrix X, Matrix Y) {
                              matrix.zeros(B.row_length(), B.col_length() - 1), "row");
         Y_pred = matrix.matmul(X, B);
         B = B - ((matrix.matmul(X.T(), Y_pred - Y) + (B * alpha)) * (lr / m));
-        B = B + (temp * alpha);
+        B = B + (temp * (alpha / m * lr));
     }
     if_fit = true;
 
@@ -65,12 +65,11 @@ Matrix Ridge::fit(Matrix X, Matrix Y) {
 // Method to print the Ridge object parameters in json format
 void Ridge::get_params() {
     std::cout << std::boolalpha;
-    std::vector<std::string> params = {"alpha", "normalize", "epochs", "lr"};
     std::cout << "[" << std::endl;
-    std::cout << "\t \"alpha\": \"" << this->alpha << "\"," << std::endl;
-    std::cout << "\t \"normalize\": \"" << this->normalize << "\"," << std::endl;
-    std::cout << "\t \"epochs\": \"" << this->epochs << "\"," << std::endl;
-    std::cout << "\t \"lr\": \"" << this->lr << "\"" << std::endl;
+    std::cout << "\t \"alpha\": \"" << alpha << "\"," << std::endl;
+    std::cout << "\t \"normalize\": \"" << normalize << "\"," << std::endl;
+    std::cout << "\t \"epochs\": \"" << epochs << "\"," << std::endl;
+    std::cout << "\t \"lr\": \"" << lr << "\"" << std::endl;
     std::cout << "]" << std::endl;
 }
 
