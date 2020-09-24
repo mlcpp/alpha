@@ -2,6 +2,7 @@
 #define _linear_regression_hpp_
 
 #include <all.hpp>
+#include <preprocessing.hpp>
 
 class LinearRegression {
   private:
@@ -35,6 +36,10 @@ void LinearRegression::fit(Matrix X, Matrix Y) {
         X.T();
         Y.T();
     }
+
+    if (normalize)
+        X = preprocessing.normalize(X, "column");
+
     bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
     assert(("Wrong dimensions.", expr));
 
@@ -77,6 +82,9 @@ void LinearRegression::get_params() {
 // Method to predict using the Linear Regression model
 Matrix LinearRegression::predict(Matrix X) {
     assert(("Fit the model before predicting.", if_fit));
+
+    if (normalize)
+        X = preprocessing.normalize(X, "column");
 
     // Add a column of 1's to X
     Matrix temp_x = matrix.ones(X.row_length(), 1);
