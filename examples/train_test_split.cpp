@@ -8,7 +8,7 @@ Slice the Matrix object according to our needs.
 Then we can split our dataset using train_test_split.
 */
 int main() {
-    Matrix mat = read_csv("./datasets/boston/boston.csv");
+    Matrix mat = read_csv("./datasets/diabetes/diabetes.csv");
 
     Matrix X = mat.slice(1, 30, 0, mat.col_length() - 1);
     X.to_double();
@@ -17,6 +17,7 @@ int main() {
 
     // Normalizing the Matrix object
     auto splitted = model_selection.train_test_split(X, y, 0);
+    auto [X_train, X_test, Y_train, Y_test] = model_selection.train_test_split(X, y, 0, 0.95, 0.05);
 
     std::cout << "X_train: " << std::endl;
     std::get<0>(splitted).print();
