@@ -9,6 +9,7 @@ int main() {
         y.push_back(rand() % 100);
         x.push_back(i);
     }
-    matplotlibcpp::plot(x, y);
+
+    matplotlibcpp::plot(x, y, "ro");
     matplotlibcpp::show();
 }

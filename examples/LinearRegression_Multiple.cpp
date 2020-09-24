@@ -2,7 +2,7 @@
 #include <LinearRegression.hpp>
 using mathplotlibcpp as plt;
 
-int main(){
+int main() {
 
     // Load the datasets
     Matrix mat = read_csv("./datasets/boston/diabetes.csv");
@@ -11,12 +11,12 @@ int main(){
     mat = mat.slice();
 
     // Split the data into training/testing sets
-    pair <Matrix, Matrix> X = split_test_train(mat);
+    pair<Matrix, Matrix> X = split_test_train(mat);
     Matrix X_train = X.first;
     Matrix X_test = X.second;
 
     // Split the targets into training/testing sets
-    pair <Matrix, Matrix> Y = split_test_train(mat[1]);
+    pair<Matrix, Matrix> Y = split_test_train(mat[1]);
     Matrix Y_train = Y.first;
     Matrix Y_test = Y.second;
 
@@ -34,10 +34,10 @@ int main(){
     coef.view();
 
     // The mean squared error
-    std :: cout << mean_squared_error(diabetes_y_test, diabetes_y_pred);
+    std ::cout << mean_squared_error(diabetes_y_test, diabetes_y_pred);
 
     // The coefficient of determination: 1 is perfect prediction
-    std :: cout << r2_score(diabetes_y_test, diabetes_y_pred);
+    std ::cout << r2_score(diabetes_y_test, diabetes_y_pred);
 
     // Plot outputs
     plt::figure_size(1200, 780);
@@ -45,7 +45,7 @@ int main(){
     plt::plot(X_test, Y_pred);
     plt::named_plot("Linear regression", x, y);
     // Set x-axis to interval [0,1000000]
-    plt::xlim(0, 1000*1000);
+    plt::xlim(0, 1000 * 1000);
     // Add graph title
     plt::title("Sample figure");
     // Enable legend.

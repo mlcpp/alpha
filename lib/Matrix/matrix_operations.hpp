@@ -65,8 +65,11 @@ Matrix MatrixOp::concat(Matrix mat1, Matrix mat2, std::string dim) {
 
 // Method to calculate Matrix multiplication
 Matrix MatrixOp::matmul(Matrix mat1, Matrix mat2) {
-    if (mat1.col_length() != mat2.row_length())
+    if (mat1.col_length() != mat2.row_length()) {
+        std::cout << mat1.row_length() << " " << mat1.col_length() << std::endl;
+        std::cout << mat2.row_length() << " " << mat2.col_length() << std::endl;
         assert(("The Matrix objects should be of compatible dimensions", false));
+    }
 
     Matrix mat;
     for (int i = 0; i < mat1.row_length(); i++) {

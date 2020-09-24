@@ -28,7 +28,6 @@ ModelSelection::train_test_split(Matrix X, Matrix y, int random_state = -1, floa
     int n = X.row_length();
     for (int i = 0; i < n; i++) {
         float num = ((float)(rand() % n)) / n;
-        std::cout << num;
         if (num < train_size) {
             X_train_vec.push_back(X.get_row(i));
             y_train_vec.push_back(y.get_row(i));

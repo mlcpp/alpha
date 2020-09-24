@@ -30,8 +30,11 @@ class LinearRegression {
 };
 
 Matrix LinearRegression::fit(Matrix X, Matrix Y) { // estimate coefficients
-
-    bool expr = X.row_length() == Y.row_length();
+    if ((X.row_length() != Y.row_length()) && (X.col_length() == Y.col_length())) {
+        X.T();
+        Y.T();
+    }
+    bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
     assert(("Wrong dimensions.", expr));
 
     // Initializing parameters with zero
@@ -55,7 +58,7 @@ Matrix LinearRegression::fit(Matrix X, Matrix Y) { // estimate coefficients
         double learning_rate = 0.001;
         for (int i = 1; i <= epochs; i++) {
             Y_pred = matrix.matmul(X, B);
-            B = B - (matrix.matmul(Y_pred - Y, X)) * (lr);
+            B = B - (matrix.matmul(X.T(), Y_pred - Y)) * (lr);
         }
         return B;
     }
@@ -77,6 +80,9 @@ void LinearRegression::get_params() {
 }
 
 Matrix LinearRegression::predict(Matrix X) {
+    // Add a column of 1's to X
+    Matrix temp_x = matrix.ones(X.row_length(), 1);
+    X = matrix.concat(temp_x, X, "column");
     Matrix Y_pred;
     Y_pred = matrix.matmul(X, B);
     return Y_pred;
