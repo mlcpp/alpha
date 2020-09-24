@@ -1,6 +1,8 @@
 // Header files
 #include <LinearRegression.hpp>
+#include <Matrix.hpp>
 #include <matplotlibcpp.hpp>
+#include <model_selection.hpp>
 namespace plt = matplotlibcpp;
 
 int main() {
