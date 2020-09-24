@@ -7,7 +7,7 @@ namespace plt = matplotlibcpp;
 
 int main() {
 
-    // Load the datasets
+    // Load the dataset
     Matrix mat = read_csv("./datasets/diabetes/diabetes.csv");
 
     // Slice one feature for data from mat
@@ -29,23 +29,27 @@ int main() {
     // Train the model using the training set
     regr.fit(X_train, Y_train);
 
-    // Make prediction using the testing set
+    // Make prediction using the training and test set
     Matrix Y_train_pred = regr.predict(X_train);
-    Matrix Y_pred = regr.predict(X_test);
+    Matrix Y_test_pred = regr.predict(X_test);
 
-    // The mean squared error
-    // std :: cout << mean_squared_error(diabetes_y_test, diabetes_y_pred);
+    // The coefficient of determination = 1 is perfect prediction
+    std ::cout << "Training set score: " << regr.score(Y_train, Y_train_pred) << std::endl;
+    std ::cout << "Test set score: " << regr.score(Y_test, Y_test_pred) << std::endl;
 
-    // The coefficient of determination: 1 is perfect prediction
-    std ::cout << regr.score(Y_train, Y_train_pred) << std::endl;
-    std ::cout << regr.score(Y_test, Y_pred) << std::endl;
+    std::cout << std::endl;
+
+    // Printing the model coefficients
+    std::cout << "Model Coefficients: " << std::endl;
+    regr.B.print();
 
     plt::figure_size(800, 600);
     plt::named_plot("Age", X_test.get_col(0), Y_test.get_col(0), "ro");
-    plt::named_plot("Predicted Age", X_test.get_col(0), Y_pred.get_col(0), "k");
+    plt::named_plot("Predicted Age", X_test.get_col(0), Y_test_pred.get_col(0), "k");
     plt::title("Simple Linear Regression");
     plt::save("./examples/LinearRegression_Simple.png");
     plt::legend();
     plt::show();
+
     return 0;
 }

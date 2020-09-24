@@ -410,8 +410,14 @@ Matrix Matrix::operator/(Matrix mat) {
         std::vector<std::string> row;
 
         for (int i = 0; i < row_length(); i++) {
-            for (int j = 0; j < col_length(); j++)
-                row.push_back(std::to_string(double_mat[i][j] / mat.double_mat[i][j]));
+            for (int j = 0; j < col_length(); j++) {
+                double val;
+                if (mat.double_mat[i][j] == 0)
+                    val = double_mat[i][j];
+                else
+                    val = double_mat[i][j] / mat.double_mat[i][j];
+                row.push_back(std::to_string(val));
+            }
             result.str_mat.push_back(row);
             row.clear();
         }
@@ -423,8 +429,14 @@ Matrix Matrix::operator/(Matrix mat) {
         std::vector<std::string> row;
 
         for (int i = 0; i < row_length(); i++) {
-            for (int j = 0; j < col_length(); j++)
-                row.push_back(std::to_string(double_mat[i][j] / mat.double_mat[i][j]));
+            for (int j = 0; j < col_length(); j++) {
+                double val;
+                if (mat.double_mat[i][j] == 0)
+                    val = double_mat[i][j];
+                else
+                    val = double_mat[i][j] / mat.double_mat[i][j];
+                row.push_back(std::to_string(val));
+            }
             result.str_mat.push_back(row);
             row.clear();
         }
@@ -436,8 +448,14 @@ Matrix Matrix::operator/(Matrix mat) {
         std::vector<std::string> row;
 
         for (int i = 0; i < row_length(); i++) {
-            for (int j = 0; j < col_length(); j++)
-                row.push_back(std::to_string(double_mat[i][j] / mat.double_mat[i][j]));
+            for (int j = 0; j < col_length(); j++) {
+                double val;
+                if (mat.double_mat[i][j] == 0)
+                    val = double_mat[i][j];
+                else
+                    val = double_mat[i][j] / mat.double_mat[i][j];
+                row.push_back(std::to_string(val));
+            }
             result.str_mat.push_back(row);
             row.clear();
         }
@@ -459,8 +477,14 @@ Matrix Matrix::operator/(double val) {
     std::vector<std::string> row;
 
     for (int i = 0; i < row_length(); i++) {
-        for (int j = 0; j < col_length(); j++)
-            row.push_back(std::to_string(double_mat[i][j] / mat_val.double_mat[i][j]));
+        for (int j = 0; j < col_length(); j++) {
+            double val;
+            if (mat_val.double_mat[i][j] == 0)
+                val = double_mat[i][j];
+            else
+                val = double_mat[i][j] / mat_val.double_mat[i][j];
+            row.push_back(std::to_string(val));
+        }
         result.str_mat.push_back(row);
         row.clear();
     }

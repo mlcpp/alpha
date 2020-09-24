@@ -13,8 +13,15 @@ int main() {
     Matrix sliced_mat = mat.slice(1, 6, 2, 5);
     sliced_mat.to_double();
 
+    std::cout << "Unnormalized:" << std::endl;
+    sliced_mat.print();
+
+    std::cout << std::endl;
+
     // Normalizing the Matrix object
-    Matrix normalized = preprocessing.normalize(sliced_mat, "row");
+    Matrix normalized = preprocessing.normalize(sliced_mat, "column");
+
+    std::cout << "Normalized:" << std::endl;
     normalized.print();
 
     return 0;
