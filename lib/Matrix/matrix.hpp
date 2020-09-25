@@ -1,7 +1,9 @@
 #ifndef _matrix_hpp_
 #define _matrix_hpp_
 
+#include <algorithm>
 #include <assert.h>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -33,6 +35,8 @@ class Matrix {
     Matrix T();
     void to_double();
     void to_string();
+    Matrix root(double);
+    Matrix power(double);
 
     // Overloaded Operators
     Matrix operator+(Matrix);
@@ -107,7 +111,8 @@ void Matrix::view(int row_start, int row_end, int col_start, int col_end) {
 
 // Method to print first 5 rows of a Matrix object
 void Matrix::head() {
-    for (int i = 0; i < 5; i++) {
+    int row = row_length() < 5 ? row_length() : 5;
+    for (int i = 0; i < row; i++) {
         for (int j = 0; j < str_mat[i].size(); j++)
             std::cout << str_mat[i][j] << "\t";
         std::cout << std::endl;
@@ -116,7 +121,8 @@ void Matrix::head() {
 
 // Method to print last 5 rows of a Matrix object
 void Matrix::tail() {
-    for (int i = str_mat.size() - 5; i < str_mat.size(); i++) {
+    int row = row_length() < 5 ? row_length() : 5;
+    for (int i = str_mat.size() - row; i < str_mat.size(); i++) {
         for (int j = 0; j < str_mat[i].size(); j++)
             std::cout << str_mat[i][j] << "\t";
         std::cout << std::endl;
