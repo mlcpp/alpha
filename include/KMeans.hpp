@@ -18,7 +18,7 @@ class KMeans {
     void get_params();
     Matrix predict(Matrix);
     double score(Matrix);
-    void set_params();
+    void set_params(int, int);
     Matrix get_centroid();
 };
 
@@ -39,8 +39,9 @@ Matrix KMeans::centroid_selection(Matrix X, int k) {
 
 Matrix KMeans::distance(Matrix X, Matrix Y) {
     // check their dimensions are same
-    if ((X.col_length() != Y.col_length()) || (X.row_length() != Y.row_length())) {
-        assert(("The Matrix objects should be of same dimensions", false));
+    bool is_compatible = (X.col_length() == Y.col_length()) || (X.row_length() == Y.row_length());
+    if (!is_compatible) {
+        assert(("The Matrix objects should be of same dimensions", is_compatible));
     }
 
     Matrix sqr = matrix.power(X - Y, 2);
@@ -102,6 +103,21 @@ Matrix KMeans::fit_predict(Matrix X_test) {
 
 Matrix KMeans::get_centroid(){
     return C;
+}
+
+// Method to print the KMeans object parameters in json format
+void KMeans::get_params() {
+    std::cout << std::boolalpha;
+    std::cout << "[" << std::endl;
+    std::cout << "\t \"n_clusters\": \"" << n_clusters << "\"," << std::endl;
+    std::cout << "\t \"epochs\": \"" << epochs << "\"" << std::endl;
+    std::cout << "]" << std::endl;
+}
+
+// Method to set the KMeans object parameters
+void KMeans::set_params(int n_clusters = 3, int epochs = 1000)) {
+    this->n_clusters = n_clusters;
+    this->epochs = epochs;
 }
 
 #endif /* _k_means_hpp_ */
