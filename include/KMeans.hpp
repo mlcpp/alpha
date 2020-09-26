@@ -19,6 +19,7 @@ class KMeans {
     Matrix predict(Matrix);
     double score(Matrix);
     void set_params();
+    Matrix get_centroid();
 };
 
 KMeans::KMeans(int n_clusters = 3, int epochs = 1000) {
@@ -97,6 +98,10 @@ Matrix KMeans::fit_predict(Matrix X_test) {
     fit(X_test);
     Matrix X_pred = predict(X_test);
     return X_pred;
+}
+
+Matrix get_centroid(){
+    return C;
 }
 
 #endif /* _k_means_hpp_ */
