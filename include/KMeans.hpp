@@ -100,7 +100,7 @@ Matrix KMeans::fit_predict(Matrix X_test) {
     return X_pred;
 }
 
-Matrix get_centroid(){
+Matrix KMeans::get_centroid(){
     return C;
 }
 
