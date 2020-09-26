@@ -1,5 +1,5 @@
-#include <all.hpp>
 #include <Matrix.hpp>
+#include <all.hpp>
 using namespace std;
 
 Matrix centroid_selection(Matrix X, int k) {
@@ -12,7 +12,7 @@ Matrix centroid_selection(Matrix X, int k) {
     return matrix.init(temp_vec);
 }
 
-int main(){
+int main() {
 
     Matrix mat = read_csv("./datasets/iris/iris.csv");
     Matrix X = mat.slice(1, 150, 0, 2);
