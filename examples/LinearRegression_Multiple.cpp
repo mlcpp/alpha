@@ -1,59 +1,49 @@
 // Header files
 #include <LinearRegression.hpp>
-using mathplotlibcpp as plt;
+#include <matplotlibcpp.hpp>
+namespace plt = matplotlibcpp;
 
 int main() {
 
     // Load the datasets
-    Matrix mat = read_csv("./datasets/boston/diabetes.csv");
+    Matrix mat = read_csv("./datasets/diabetes/diabetes.csv");
 
-    // Use only one feature
-    mat = mat.slice();
+    // Slice one feature for data from mat
+    Matrix X = mat.slice(1, mat.row_length(), 0, 1);
 
-    // Split the data into training/testing sets
-    pair<Matrix, Matrix> X = split_test_train(mat);
-    Matrix X_train = X.first;
-    Matrix X_test = X.second;
+    // Slice targets from mat
+    Matrix Y = mat.slice(1, mat.row_length(), mat.col_length() - 1, mat.col_length());
 
-    // Split the targets into training/testing sets
-    pair<Matrix, Matrix> Y = split_test_train(mat[1]);
-    Matrix Y_train = Y.first;
-    Matrix Y_test = Y.second;
+    // Convert data and targets from string to double
+    X.to_double();
+    Y.to_double();
+
+    // Split the data and targets into training/testing sets
+    auto [X_train, X_test, Y_train, Y_test] = model_selection.train_test_split(X, Y, 0, 0.95, 0.05);
 
     // Create linear regression object
-    LinearRegression regr{};
+    LinearRegression regr;
 
     // Train the model using the training set
     regr.fit(X_train, Y_train);
 
     // Make prediction using the testing set
+    Matrix Y_train_pred = regr.predict(X_train);
     Matrix Y_pred = regr.predict(X_test);
 
-    // Print coefficients
-    Matrix coef = regr.coef_;
-    coef.view();
-
     // The mean squared error
-    std ::cout << mean_squared_error(diabetes_y_test, diabetes_y_pred);
+    // std :: cout << mean_squared_error(diabetes_y_test, diabetes_y_pred);
 
     // The coefficient of determination: 1 is perfect prediction
-    std ::cout << r2_score(diabetes_y_test, diabetes_y_pred);
+    std ::cout << regr.score(Y_train, Y_train_pred) << std::endl;
+    std ::cout << regr.score(Y_test, Y_pred) << std::endl;
 
-    // Plot outputs
-    plt::figure_size(1200, 780);
-    plt::scatter(X_test, Y_test);
-    plt::plot(X_test, Y_pred);
-    plt::named_plot("Linear regression", x, y);
-    // Set x-axis to interval [0,1000000]
-    plt::xlim(0, 1000 * 1000);
-    // Add graph title
-    plt::title("Sample figure");
-    // Enable legend.
+    plt::figure_size(800, 600);
+    plt::named_plot("Age", X_test.get_col(0), Y_test.get_col(0), "ro");
+    plt::named_plot("Predicted Age", X_test.get_col(0), Y_pred.get_col(0), "k");
+    plt::title("Simple Linear Regression");
+    plt::save("./examples/LinearRegression_Simple.png");
     plt::legend();
-    // Save the image (file format is determined by the extension)
-    plt::save("./basic.png");
-
     plt::show();
-
     return 0;
 }
