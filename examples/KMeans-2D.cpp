@@ -18,9 +18,12 @@ int main() {
 
     // plot the 3 clusters (categorized data)
     // (first feature where y = 0, second feature)
-    plt::plot(X.slice_select(Y_pred, 0, 0), X.slice_select(Y_pred, 0, 1), "g^");
-    plt::plot(X.slice_select(Y_pred, 1, 0), X.slice_select(Y_pred, 0, 1), "k^");
-    plt::plot(X.slice_select(Y_pred, 2, 0), X.slice_select(Y_pred, 0, 1), "y^");
+    plt::plot(matrix.slice_select(X, Y_pred, 0, 0).get_col(0),
+              matrix.slice_select(X, Y_pred, 0, 1).get_col(0), "g^");
+    plt::plot(matrix.slice_select(X, Y_pred, 1, 0).get_col(0),
+              matrix.slice_select(X, Y_pred, 1, 1).get_col(0), "k^");
+    plt::plot(matrix.slice_select(X, Y_pred, 2, 0).get_col(0),
+              matrix.slice_select(X, Y_pred, 2, 1).get_col(0), "y^");
     plt::plot(centroid.get_col(0), centroid.get_col(1), "*");
     plt::show();
 }
