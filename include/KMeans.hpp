@@ -115,7 +115,7 @@ void KMeans::get_params() {
 }
 
 // Method to set the KMeans object parameters
-void KMeans::set_params(int n_clusters = 3, int epochs = 1000)) {
+void KMeans::set_params(int n_clusters = 3, int epochs = 1000) {
     this->n_clusters = n_clusters;
     this->epochs = epochs;
 }
