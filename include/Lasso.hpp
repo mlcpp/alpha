@@ -1,10 +1,10 @@
-#ifndef _ridge_hpp_
-#define _ridge_hpp_
+#ifndef _lasso_hpp_
+#define _lasso_hpp_
 
 #include <all.hpp>
 #include <preprocessing.hpp>
 
-class Ridge {
+class Lasso {
   private:
     bool normalize, if_fit = false;
     int epochs;
@@ -14,24 +14,25 @@ class Ridge {
   public:
     Matrix B;
 
-    Ridge(double, bool, int, double);
+    Lasso(double, bool, int, double);
     void fit(Matrix, Matrix);
     void get_params();
+    void path();
     Matrix predict(Matrix);
     double score(Matrix, Matrix);
     void set_params(double, bool, int, double);
 };
 
 // Constructor
-Ridge::Ridge(double alpha = 1, bool normalize = false, int epochs = 1000, double lr = 0.001) {
+Lasso::Lasso(double alpha = 1, bool normalize = false, int epochs = 1000, double lr = 0.001) {
     this->alpha = alpha;
     this->normalize = normalize;
     this->epochs = epochs;
     this->lr = lr;
 }
 
-// Method to fit the Ridge model
-void Ridge::fit(Matrix X, Matrix Y) {
+// Method to fit the Lasso model
+void Lasso::fit(Matrix X, Matrix Y) {
     if ((X.row_length() != Y.row_length()) && (X.col_length() == Y.col_length())) {
         X.T();
         Y.T();
@@ -64,8 +65,8 @@ void Ridge::fit(Matrix X, Matrix Y) {
     if_fit = true;
 }
 
-// Method to print the Ridge object parameters in json format
-void Ridge::get_params() {
+// Method to print the Lasso object parameters in json format
+void Lasso::get_params() {
     std::cout << std::boolalpha;
     std::cout << "[" << std::endl;
     std::cout << "\t \"alpha\": \"" << alpha << "\"," << std::endl;
@@ -75,8 +76,8 @@ void Ridge::get_params() {
     std::cout << "]" << std::endl;
 }
 
-// Method to predict using the Ridge model
-Matrix Ridge::predict(Matrix X) {
+// Method to predict using the Lasso model
+Matrix Lasso::predict(Matrix X) {
     assert(("Fit the model before predicting.", if_fit));
 
     if (normalize)
@@ -91,7 +92,7 @@ Matrix Ridge::predict(Matrix X) {
 }
 
 // Method to calculate the score of the predictions
-double Ridge::score(Matrix Y_pred, Matrix Y) {
+double Lasso::score(Matrix Y_pred, Matrix Y) {
     double Y_mean = ((matrix.mean(Y, "column"))(0, 0));
     double residual_sum_of_squares = (matrix.matmul((Y_pred - Y).T(), (Y_pred - Y)))(0, 0);
     double total_sum_of_squares = (matrix.matmul((Y - Y_mean).T(), (Y - Y_mean)))(0, 0);
@@ -100,8 +101,8 @@ double Ridge::score(Matrix Y_pred, Matrix Y) {
     return score;
 }
 
-// Method to set the Ridge object parameters
-void Ridge::set_params(double alpha = 1, bool normalize = false, int epochs = 1000,
+// Method to set the Lasso object parameters
+void Lasso::set_params(double alpha = 1, bool normalize = false, int epochs = 1000,
                        double lr = 0.001) {
     this->alpha = alpha;
     this->normalize = normalize;
@@ -109,4 +110,4 @@ void Ridge::set_params(double alpha = 1, bool normalize = false, int epochs = 10
     this->lr = lr;
 }
 
-#endif /* _ridge_hpp_ */
+#endif /* _lasso_hpp_ */

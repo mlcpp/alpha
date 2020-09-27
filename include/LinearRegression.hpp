@@ -9,6 +9,7 @@ class LinearRegression {
     bool normalize, ols, if_fit = false;
     int epochs;
     double lr;
+    Preprocessing preprocessing;
 
   public:
     Matrix B;

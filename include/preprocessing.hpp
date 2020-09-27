@@ -5,12 +5,23 @@
 
 class Preprocessing {
   private:
+    bool if_mean = false, if_std = false;
+    Matrix mean, std;
+
   public:
     Matrix normalize(Matrix, std::string);
-} preprocessing;
+};
 
 Matrix Preprocessing::normalize(Matrix mat, std::string dim) {
-    Matrix result = (mat - matrix.mean(mat, dim)) / matrix.std(mat, dim);
+    if (!if_mean) {
+        mean = matrix.mean(mat, dim);
+        if_mean = true;
+    }
+    if (!if_std) {
+        std = matrix.std(mat, dim);
+        if_std = true;
+    }
+    Matrix result = (mat - mean) / std;
     return result;
 }
 
