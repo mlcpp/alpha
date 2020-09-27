@@ -37,26 +37,22 @@ Matrix KMeans::centroid_selection(Matrix X, int k) {
     return matrix.init(temp_vec);
 }
 
-Matrix KMeans::distance(Matrix X, Matrix Y) {
-    // check their dimensions are same
-    bool is_compatible = (X.col_length() == Y.col_length()) || (X.row_length() == Y.row_length());
-    if (!is_compatible) {
-        assert(("The Matrix objects should be of same dimensions", is_compatible));
-    }
 
-    Matrix sqr = matrix.power(X - Y, 2);
-    std::vector<std::vector<double>> vec = sqr.get();
-
-    // reduce sqr matrix to 1D
-    for (int i = 0; i < sqr.row_length(); i++) {
-        for (int j = 1; j < sqr.col_length(); j++) {
-            vec[i][0] += vec[i][j];
+Matrix KMeans::distance(Matrix X, Matrix C) {
+    std::vector<std::vector<double>> res;
+    for (int i = 0; i < X.row_length(); i++) {
+        std::vector<double> row;
+        for (int j = 0; j < C.row_length(); j++) {
+            std::vector <double> sqr = matrix.power(X.slice(i, i+1, 0, X.col_length()) - C.slice(j, j+1, 0, C.col_length()), 2).get_row(0);
+            for (int k = 1; k < sqr.size(); k++) {
+                sqr[0] += sqr[k];
+            }
+            row.push_back(sqr[0]);
         }
+        res.push_back(row);
+        row.clear();
     }
-    Matrix dist = matrix.init(vec);
-    dist = matrix.sqrt(dist.slice(0, dist.row_length(), 0, 1));
-
-    return dist;
+    return matrix.init(res);
 }
 // computes k optimal centroids and classifies given X points
 void KMeans::fit(Matrix X) {
@@ -65,7 +61,7 @@ void KMeans::fit(Matrix X) {
     for (int i = 0; i < epochs; i++) {
         Matrix temp = distance(X, C);          // (m,k)
         Matrix Z = matrix.argmin(temp, "row"); // (m,1)
-        C = update_mean(X, C, Z);
+        // C = update_mean(X, C, Z);
     }
 }
 
@@ -101,9 +97,7 @@ Matrix KMeans::fit_predict(Matrix X_test) {
     return X_pred;
 }
 
-Matrix KMeans::get_centroid(){
-    return C;
-}
+Matrix KMeans::get_centroid() { return C; }
 
 // Method to print the KMeans object parameters in json format
 void KMeans::get_params() {
