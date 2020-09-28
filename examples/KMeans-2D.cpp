@@ -19,7 +19,7 @@ int main() {
     Matrix Y_pred = km.fit_predict(X); // fit() and predict()
     Y_pred.to_double();
     Matrix centroid = km.get_centroid();
-
+    std::cout << km.score() << std::endl;
     // plot the 3 clusters (categorized data)
     plt::plot(matrix.slice_select(X, Y_pred, 0, 0).get_col(0),
               matrix.slice_select(X, Y_pred, 0, 1).get_col(0), "g1");

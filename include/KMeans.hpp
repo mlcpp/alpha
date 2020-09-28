@@ -11,12 +11,14 @@ class KMeans {
     Matrix distance(Matrix, Matrix);
     Matrix update_centroid(Matrix, Matrix, Matrix);
     bool is_fit;
-    double J;
+    long double J;
+
   public:
     KMeans(int, int);
     void fit(Matrix);
     Matrix fit_predict(Matrix);
     void get_params();
+    long double score();
     Matrix predict(Matrix);
     double score(Matrix);
     void set_params(int, int);
@@ -57,7 +59,6 @@ Matrix KMeans::distance(Matrix X, Matrix C) {
     return matrix.init(res);
 }
 
-
 // computes k optimal centroids and classifies given X points
 void KMeans::fit(Matrix X) {
     C = centroid_selection(X, n_clusters);
@@ -67,10 +68,10 @@ void KMeans::fit(Matrix X) {
         Matrix Z = matrix.argmin(temp, "row"); // (m,1)
         C = update_centroid(X, C, Z);
     }
+    is_fit = true;
 }
 
 Matrix KMeans::update_centroid(Matrix X, Matrix C, Matrix Z) {
-
     std::vector<std::vector<std::vector<double>>> cluster_members;
     for (int i = 0; i < C.row_length(); i++) {
         std::vector<std::vector<double>> rows;
@@ -81,19 +82,22 @@ Matrix KMeans::update_centroid(Matrix X, Matrix C, Matrix Z) {
         cluster_members[Z(i, 0)].push_back(X.get_row(i));
     }
     assert(("K is more than the current number of clusters.", cluster_members[0].size() != 0));
-     
-    J = J + matrix.sqrt(distance(matrix.init(cluster_members[0]), C.slice(0, row_length(), 0, 1))(0, 0));
-
+    J += matrix.sum(matrix.sqrt(distance(matrix.init(cluster_members[0]),
+                                            C.slice(0, 1, 0, C.col_length()))), "column")(0, 0);
     Matrix X_mean = matrix.mean(matrix.init(cluster_members[0]), "column");
     for (int i = 1; i < C.row_length(); i++) {
         assert(("K is more than the current number of clusters.", cluster_members[i].size() != 0));
         X_mean =
             matrix.concat(X_mean, matrix.mean(matrix.init(cluster_members[i]), "column"), "row");
-        J = J + matrix.sqrt(distance(matrix.init(cluster_members[i]),
-                                     C.slice(0, row_length(), i, i+1))(0, 0));
+        J += matrix.sum(matrix.sqrt(distance(matrix.init(cluster_members[1]), C.slice(0, i, 0, C.col_length()))), "column")(0, 0);
     }
-    J = J / X.row_length();
+    J = J/X.row_length();
     return X_mean;
+}
+
+long double KMeans::score(){
+    long double score = -1 * J;
+    return score;
 }
 
 // classifies new given points into one of ready k clusters
@@ -111,8 +115,7 @@ Matrix KMeans::fit_predict(Matrix X_test) {
     return X_pred;
 }
 
-Matrix KMeans::get_centroid() { 
-    return C; }
+Matrix KMeans::get_centroid() { return C; }
 
 // Method to print the KMeans object parameters in json format
 void KMeans::get_params() {
