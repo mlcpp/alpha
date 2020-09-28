@@ -9,13 +9,16 @@ class KMeans {
     Matrix C;
     Matrix centroid_selection(Matrix, int);
     Matrix distance(Matrix, Matrix);
-    Matrix update_mean(Matrix, Matrix, Matrix);
+    Matrix update_centroid(Matrix, Matrix, Matrix);
+    bool is_fit;
+    long double J;
 
   public:
     KMeans(int, int);
     void fit(Matrix);
     Matrix fit_predict(Matrix);
     void get_params();
+    long double score();
     Matrix predict(Matrix);
     double score(Matrix);
     void set_params(int, int);
@@ -25,6 +28,8 @@ class KMeans {
 KMeans::KMeans(int n_clusters = 3, int epochs = 1000) {
     this->n_clusters = n_clusters;
     this->epochs = epochs;
+    J = 0;
+    is_fit = 0;
 }
 
 Matrix KMeans::centroid_selection(Matrix X, int k) {
@@ -37,27 +42,23 @@ Matrix KMeans::centroid_selection(Matrix X, int k) {
     return matrix.init(temp_vec);
 }
 
-Matrix KMeans::distance(Matrix X, Matrix Y) {
-    // check their dimensions are same
-    bool is_compatible = (X.col_length() == Y.col_length()) || (X.row_length() == Y.row_length());
-    if (!is_compatible) {
-        assert(("The Matrix objects should be of same dimensions", is_compatible));
-    }
-
-    Matrix sqr = matrix.power(X - Y, 2);
-    std::vector<std::vector<double>> vec = sqr.get();
-
-    // reduce sqr matrix to 1D
-    for (int i = 0; i < sqr.row_length(); i++) {
-        for (int j = 1; j < sqr.col_length(); j++) {
-            vec[i][0] += vec[i][j];
+Matrix KMeans::distance(Matrix X, Matrix C) {
+    std::vector<std::vector<double>> res;
+    for (int i = 0; i < X.row_length(); i++) {
+        std::vector<double> row;
+        for (int j = 0; j < C.row_length(); j++) {
+            Matrix sum = matrix.sum(matrix.power(X.slice(i, i + 1, 0, X.col_length()) -
+                                                     C.slice(j, j + 1, 0, C.col_length()),
+                                                 2),
+                                    "row");
+            row.push_back(sum(0, 0));
         }
+        res.push_back(row);
+        row.clear();
     }
-    Matrix dist = matrix.init(vec);
-    dist = matrix.sqrt(dist.slice(0, dist.row_length(), 0, 1));
-
-    return dist;
+    return matrix.init(res);
 }
+
 // computes k optimal centroids and classifies given X points
 void KMeans::fit(Matrix X) {
     C = centroid_selection(X, n_clusters);
@@ -65,25 +66,38 @@ void KMeans::fit(Matrix X) {
     for (int i = 0; i < epochs; i++) {
         Matrix temp = distance(X, C);          // (m,k)
         Matrix Z = matrix.argmin(temp, "row"); // (m,1)
-        C = update_mean(X, C, Z);
+        C = update_centroid(X, C, Z);
     }
+    is_fit = true;
 }
 
-Matrix KMeans::update_mean(Matrix X, Matrix C, Matrix Z) {
+Matrix KMeans::update_centroid(Matrix X, Matrix C, Matrix Z) {
     std::vector<std::vector<std::vector<double>>> cluster_members;
     for (int i = 0; i < C.row_length(); i++) {
         std::vector<std::vector<double>> rows;
         cluster_members.push_back(rows);
     }
+
     for (int i = 0; i < Z.row_length(); i++) {
         cluster_members[Z(i, 0)].push_back(X.get_row(i));
     }
+    assert(("K is more than the current number of clusters.", cluster_members[0].size() != 0));
+    J += matrix.sum(matrix.sqrt(distance(matrix.init(cluster_members[0]),
+                                            C.slice(0, 1, 0, C.col_length()))), "column")(0, 0);
     Matrix X_mean = matrix.mean(matrix.init(cluster_members[0]), "column");
     for (int i = 1; i < C.row_length(); i++) {
+        assert(("K is more than the current number of clusters.", cluster_members[i].size() != 0));
         X_mean =
             matrix.concat(X_mean, matrix.mean(matrix.init(cluster_members[i]), "column"), "row");
+        J += matrix.sum(matrix.sqrt(distance(matrix.init(cluster_members[1]), C.slice(0, i, 0, C.col_length()))), "column")(0, 0);
     }
+    J = J/X.row_length();
     return X_mean;
+}
+
+long double KMeans::score(){
+    long double score = -1 * J;
+    return score;
 }
 
 // classifies new given points into one of ready k clusters
@@ -101,9 +115,7 @@ Matrix KMeans::fit_predict(Matrix X_test) {
     return X_pred;
 }
 
-Matrix KMeans::get_centroid(){
-    return C;
-}
+Matrix KMeans::get_centroid() { return C; }
 
 // Method to print the KMeans object parameters in json format
 void KMeans::get_params() {
@@ -115,7 +127,7 @@ void KMeans::get_params() {
 }
 
 // Method to set the KMeans object parameters
-void KMeans::set_params(int n_clusters = 3, int epochs = 1000)) {
+void KMeans::set_params(int n_clusters = 3, int epochs = 1000) {
     this->n_clusters = n_clusters;
     this->epochs = epochs;
 }
