@@ -16,23 +16,22 @@ int main() {
     y.to_double();
 
     // Normalizing the Matrix object
-    auto splitted = model_selection.train_test_split(X, y, 0);
-    auto [X_train, X_test, Y_train, Y_test] = model_selection.train_test_split(X, y, 0, 0.95, 0.05);
+    auto [X_train, X_test, y_train, y_test] = model_selection.train_test_split(X, y, 0);
 
     std::cout << "X_train: " << std::endl;
-    std::get<0>(splitted).print();
+    X_train.print();
     std::cout << std::endl;
 
     std::cout << "X_test: " << std::endl;
-    std::get<1>(splitted).print();
+    X_test.print();
     std::cout << std::endl;
 
     std::cout << "y_train: " << std::endl;
-    std::get<2>(splitted).print();
+    y_train.print();
     std::cout << std::endl;
 
     std::cout << "y_test: " << std::endl;
-    std::get<3>(splitted).print();
+    y_test.print();
     std::cout << std::endl;
 
     return 0;

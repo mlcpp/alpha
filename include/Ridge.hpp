@@ -6,7 +6,7 @@
 
 class Ridge {
   private:
-    bool normalize, if_fit = false;
+    bool normalize, ols, if_fit = false;
     int epochs;
     double lr, alpha;
     Preprocessing preprocessing;
@@ -14,18 +14,20 @@ class Ridge {
   public:
     Matrix B;
 
-    Ridge(double, bool, int, double);
+    Ridge(double, bool, bool, int, double);
     void fit(Matrix, Matrix);
     void get_params();
     Matrix predict(Matrix);
     double score(Matrix, Matrix);
-    void set_params(double, bool, int, double);
+    void set_params(double, bool, bool, int, double);
 };
 
 // Constructor
-Ridge::Ridge(double alpha = 1, bool normalize = false, int epochs = 1000, double lr = 0.001) {
+Ridge::Ridge(double alpha = 1, bool normalize = false, bool ols = false, int epochs = 100,
+             double lr = 0.1) {
     this->alpha = alpha;
     this->normalize = normalize;
+    this->ols = ols;
     this->epochs = epochs;
     this->lr = lr;
 }
@@ -52,14 +54,24 @@ void Ridge::fit(Matrix X, Matrix Y) {
     int m = X.row_length();
     Matrix temp;
     Matrix Y_pred;
-
+    // ols
+    if (ols) {
+        Matrix L = matrix.eye(X.col_length()) * alpha;
+        L(0, 0) = 0;
+        L(0, 0);
+        Matrix C = matrix.inverse((matrix.matmul(X.T(), X)) + L);
+        Matrix D = matrix.matmul(X.T(), Y);
+        B = matrix.matmul(C, D);
+    }
     // gradient descent
-    for (int i = 1; i <= epochs; i++) {
-        temp = matrix.concat(B.slice(0, B.row_length(), 0, 1),
-                             matrix.zeros(B.row_length(), B.col_length() - 1), "column");
-        Y_pred = matrix.matmul(X, B);
-        B = B - ((matrix.matmul(X.T(), Y_pred - Y) + (B * alpha)) * (lr / m));
-        B = B + (temp * (alpha / m * lr));
+    else {
+        for (int i = 1; i <= epochs; i++) {
+            temp = matrix.concat(B.slice(0, B.row_length(), 0, 1),
+                                 matrix.zeros(B.row_length(), B.col_length() - 1), "column");
+            Y_pred = matrix.matmul(X, B);
+            B = B - ((matrix.matmul(X.T(), Y_pred - Y) + (B * alpha)) * (lr / m));
+            B = B + (temp * (alpha / m * lr));
+        }
     }
     if_fit = true;
 }
@@ -70,6 +82,7 @@ void Ridge::get_params() {
     std::cout << "[" << std::endl;
     std::cout << "\t \"alpha\": \"" << alpha << "\"," << std::endl;
     std::cout << "\t \"normalize\": \"" << normalize << "\"," << std::endl;
+    std::cout << "\t \"ols\": \"" << ols << "\"," << std::endl;
     std::cout << "\t \"epochs\": \"" << epochs << "\"," << std::endl;
     std::cout << "\t \"lr\": \"" << lr << "\"" << std::endl;
     std::cout << "]" << std::endl;
@@ -101,10 +114,11 @@ double Ridge::score(Matrix Y_pred, Matrix Y) {
 }
 
 // Method to set the Ridge object parameters
-void Ridge::set_params(double alpha = 1, bool normalize = false, int epochs = 1000,
-                       double lr = 0.001) {
+void Ridge::set_params(double alpha = 1, bool normalize = false, bool ols = false, int epochs = 100,
+                       double lr = 0.1) {
     this->alpha = alpha;
     this->normalize = normalize;
+    this->ols = ols;
     this->epochs = epochs;
     this->lr = lr;
 }

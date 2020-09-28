@@ -8,27 +8,28 @@ class Lasso {
   private:
     bool normalize, if_fit = false;
     int epochs;
-    double lr, alpha;
+    double alpha;
     Preprocessing preprocessing;
+
+    double S(double);
 
   public:
     Matrix B;
 
-    Lasso(double, bool, int, double);
+    Lasso(double, bool, int);
     void fit(Matrix, Matrix);
     void get_params();
     void path();
     Matrix predict(Matrix);
     double score(Matrix, Matrix);
-    void set_params(double, bool, int, double);
+    void set_params(double, bool, int);
 };
 
 // Constructor
-Lasso::Lasso(double alpha = 1, bool normalize = false, int epochs = 1000, double lr = 0.001) {
+Lasso::Lasso(double alpha = 1, bool normalize = false, int epochs = 100) {
     this->alpha = alpha;
     this->normalize = normalize;
     this->epochs = epochs;
-    this->lr = lr;
 }
 
 // Method to fit the Lasso model
@@ -54,13 +55,16 @@ void Lasso::fit(Matrix X, Matrix Y) {
     Matrix temp;
     Matrix Y_pred;
 
-    // gradient descent
+    // coordinate descent
     for (int i = 1; i <= epochs; i++) {
-        temp = matrix.concat(B.slice(0, B.row_length(), 0, 1),
-                             matrix.zeros(B.row_length(), B.col_length() - 1), "column");
-        Y_pred = matrix.matmul(X, B);
-        B = B - ((matrix.matmul(X.T(), Y_pred - Y) + (B * alpha)) * (lr / m));
-        B = B + (temp * (alpha / m * lr));
+        for (int j = 0; j < X.col_length(); j++) {
+            double p = ((matrix.matmul(
+                (Y - (matrix.matmul(matrix.del(X, j, "column"), matrix.del(B, j, "row")))).T(),
+                X.slice(0, X.row_length(), j, j + 1))))(0, 0);
+            Matrix temp = X.slice(0, X.row_length(), j, j + 1);
+            double z = (matrix.matmul(temp.T(), temp))(0, 0);
+            B(j, 0) = S(p) / z;
+        }
     }
     if_fit = true;
 }
@@ -72,7 +76,6 @@ void Lasso::get_params() {
     std::cout << "\t \"alpha\": \"" << alpha << "\"," << std::endl;
     std::cout << "\t \"normalize\": \"" << normalize << "\"," << std::endl;
     std::cout << "\t \"epochs\": \"" << epochs << "\"," << std::endl;
-    std::cout << "\t \"lr\": \"" << lr << "\"" << std::endl;
     std::cout << "]" << std::endl;
 }
 
@@ -102,12 +105,21 @@ double Lasso::score(Matrix Y_pred, Matrix Y) {
 }
 
 // Method to set the Lasso object parameters
-void Lasso::set_params(double alpha = 1, bool normalize = false, int epochs = 1000,
-                       double lr = 0.001) {
+void Lasso::set_params(double alpha = 1, bool normalize = false, int epochs = 100) {
     this->alpha = alpha;
     this->normalize = normalize;
     this->epochs = epochs;
-    this->lr = lr;
+}
+
+// Helper methods
+
+double Lasso::S(double p) {
+    if (p < -alpha)
+        return p + alpha;
+    else if (p > alpha)
+        return p - alpha;
+    else
+        return 0;
 }
 
 #endif /* _lasso_hpp_ */

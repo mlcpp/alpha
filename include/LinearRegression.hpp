@@ -23,8 +23,8 @@ class LinearRegression {
 };
 
 // Constructor
-LinearRegression::LinearRegression(bool normalize = false, bool ols = false, int epochs = 1000,
-                                   double lr = 0.001) {
+LinearRegression::LinearRegression(bool normalize = false, bool ols = false, int epochs = 100,
+                                   double lr = 0.1) {
     this->normalize = normalize;
     this->ols = ols;
     this->epochs = epochs;
@@ -106,8 +106,8 @@ double LinearRegression::score(Matrix Y_pred, Matrix Y) {
 }
 
 // Method to set the Linear Regression object parameters
-void LinearRegression::set_params(bool normalize = false, bool ols = false, int epochs = 1000,
-                                  double lr = 0.001) {
+void LinearRegression::set_params(bool normalize = false, bool ols = false, int epochs = 100,
+                                  double lr = 0.1) {
     this->normalize = normalize;
     this->ols = ols;
     this->epochs = epochs;
