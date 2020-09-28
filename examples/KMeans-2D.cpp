@@ -9,6 +9,7 @@ int main() {
     X = X.slice(1, X.row_length(), 0, 2);
     X.to_double();
     // plot uncategorized data
+    plt::backend("GTK3Agg");
     plt::plot(X.get_col(0), X.get_col(1), "ko");
     plt::show();
 

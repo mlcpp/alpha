@@ -11,6 +11,7 @@ class KMeans {
     Matrix distance(Matrix, Matrix);
     Matrix update_centroid(Matrix, Matrix, Matrix);
     bool is_fit;
+    double J;
   public:
     KMeans(int, int);
     void fit(Matrix);
@@ -25,6 +26,8 @@ class KMeans {
 KMeans::KMeans(int n_clusters = 3, int epochs = 1000) {
     this->n_clusters = n_clusters;
     this->epochs = epochs;
+    J = 0;
+    is_fit = 0;
 }
 
 Matrix KMeans::centroid_selection(Matrix X, int k) {
@@ -54,6 +57,7 @@ Matrix KMeans::distance(Matrix X, Matrix C) {
     return matrix.init(res);
 }
 
+
 // computes k optimal centroids and classifies given X points
 void KMeans::fit(Matrix X) {
     C = centroid_selection(X, n_clusters);
@@ -77,12 +81,18 @@ Matrix KMeans::update_centroid(Matrix X, Matrix C, Matrix Z) {
         cluster_members[Z(i, 0)].push_back(X.get_row(i));
     }
     assert(("K is more than the current number of clusters.", cluster_members[0].size() != 0));
+     
+    J = J + matrix.sqrt(distance(matrix.init(cluster_members[0]), C.slice(0, row_length(), 0, 1))(0, 0));
+
     Matrix X_mean = matrix.mean(matrix.init(cluster_members[0]), "column");
     for (int i = 1; i < C.row_length(); i++) {
         assert(("K is more than the current number of clusters.", cluster_members[i].size() != 0));
         X_mean =
             matrix.concat(X_mean, matrix.mean(matrix.init(cluster_members[i]), "column"), "row");
+        J = J + matrix.sqrt(distance(matrix.init(cluster_members[i]),
+                                     C.slice(0, row_length(), i, i+1))(0, 0));
     }
+    J = J / X.row_length();
     return X_mean;
 }
 
