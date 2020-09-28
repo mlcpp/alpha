@@ -1,6 +1,6 @@
 // Header files
+#include <Lasso.hpp>
 #include <Matrix.hpp>
-#include <Ridge.hpp>
 #include <matplotlibcpp.hpp>
 #include <model_selection.hpp>
 namespace plt = matplotlibcpp;
@@ -9,11 +9,10 @@ namespace plt = matplotlibcpp;
 
 Read csv files to get a Matrix object.
 Slice the Matrix object according to our needs.
-Run Ridge Regression, print scores and plot predictions in 3 ways:
+Run Lasso Regression, print scores and plot predictions in 2 ways:
 
-1. Gradient Descent without Normalization
-2. Gradient Descent with Normalization
-3. Ordinary Least Squares
+1. Coordinate Descent without Normalization
+2. Coordinate Descent with Normalization
 */
 int main() {
     // Load the dataset
@@ -31,11 +30,11 @@ int main() {
     // Split the data and targets into training/testing sets
     auto [X_train, X_test, Y_train, Y_test] = model_selection.train_test_split(X, Y, 0);
 
-    // Gradient Descent without Normalization
+    // Coordinate Descent without Normalization
 
-    // Create Ridge regression object for Gradient Descent without Normalization
-    std::cout << "Ridge Regression using Gradient Descent without Normalization: " << std::endl;
-    Ridge regr_d;
+    // Create Lasso object for Coordinate Descent without Normalization
+    std::cout << "Lasso Regression using Coordinate Descent without Normalization: " << std::endl;
+    Lasso regr_d;
 
     // Train the model using the training set
     regr_d.fit(X_train, Y_train);
@@ -59,15 +58,15 @@ int main() {
     plt::figure_size(800, 600);
     plt::plot(X.get_col(0), Y.get_col(0), "ro");
     plt::plot(X.get_col(0), Y_pred_d.get_col(0), "k");
-    plt::title("Ridge - Gradient Descent");
-    plt::save("./examples/Ridge - Gradient Descent.png");
+    plt::title("Lasso - Coordinate Descent");
+    plt::save("./examples/Lasso - Coordinate Descent.png");
     plt::show();
 
-    // Gradient Descent with Normalization
+    // Coordinate Descent with Normalization
 
-    // Create Ridge regression object for Gradient Descent with Normalization
-    std::cout << "Ridge Regression using Gradient Descent with Normalization: " << std::endl;
-    Ridge regr_n(1, true);
+    // Create Lasso object for Coordinate Descent with Normalization
+    std::cout << "Lasso Regression using Coordinate Descent with Normalization: " << std::endl;
+    Lasso regr_n(1, true);
 
     // Train the model using the training set
     regr_n.fit(X_train, Y_train);
@@ -86,44 +85,12 @@ int main() {
     // Printing the model coefficients
     std::cout << "Model Coefficients: " << std::endl;
     regr_n.B.print();
-    std::cout << std::endl << std::endl;
 
     plt::figure_size(800, 600);
     plt::plot(X.get_col(0), Y.get_col(0), "ro");
     plt::plot(X.get_col(0), Y_pred_n.get_col(0), "k");
-    plt::title("Ridge - Gradient Descent with Normalization");
-    plt::save("./examples/Ridge - Gradient Descent with Normalization.png");
-    plt::show();
-
-    // Ordinary Least Squares
-
-    // Create Ridge regression object for Ordinary Least Squares
-    std::cout << "Ridge Regression using Ordinary Least Squares: " << std::endl;
-    Ridge regr_o(1, false, true);
-
-    // Train the model using the training set
-    regr_o.fit(X_train, Y_train);
-
-    // Make prediction using the training and test set
-    Matrix Y_train_pred_o = regr_o.predict(X_train);
-    Matrix Y_test_pred_o = regr_o.predict(X_test);
-    Matrix Y_pred_o = regr_o.predict(X);
-
-    // The coefficient of determination = 1 is perfect prediction
-    std ::cout << "Training set score: " << regr_o.score(Y_train, Y_train_pred_o) << std::endl;
-    std ::cout << "Test set score: " << regr_o.score(Y_test, Y_test_pred_o) << std::endl;
-
-    std::cout << std::endl;
-
-    // Printing the model coefficients
-    std::cout << "Model Coefficients: " << std::endl;
-    regr_o.B.print();
-
-    plt::figure_size(800, 600);
-    plt::plot(X.get_col(0), Y.get_col(0), "ro");
-    plt::plot(X.get_col(0), Y_pred_o.get_col(0), "k");
-    plt::title("Ridge - Ordinary Least Squares");
-    plt::save("./examples/Ridge - Ordinary Least Squares.png");
+    plt::title("Lasso - Coordinate Descent with Normalization");
+    plt::save("./examples/Lasso - Coordinate Descent with Normalization.png");
     plt::show();
 
     return 0;

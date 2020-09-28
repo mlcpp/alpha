@@ -1,6 +1,6 @@
 // Header files
+#include <LinearRegression.hpp>
 #include <Matrix.hpp>
-#include <Ridge.hpp>
 #include <matplotlibcpp.hpp>
 #include <model_selection.hpp>
 namespace plt = matplotlibcpp;
@@ -9,7 +9,7 @@ namespace plt = matplotlibcpp;
 
 Read csv files to get a Matrix object.
 Slice the Matrix object according to our needs.
-Run Ridge Regression, print scores and plot predictions in 3 ways:
+Run Linear Regression, print scores and plot predictions in 3 ways:
 
 1. Gradient Descent without Normalization
 2. Gradient Descent with Normalization
@@ -33,9 +33,9 @@ int main() {
 
     // Gradient Descent without Normalization
 
-    // Create Ridge regression object for Gradient Descent without Normalization
-    std::cout << "Ridge Regression using Gradient Descent without Normalization: " << std::endl;
-    Ridge regr_d;
+    // Create linear regression object for Gradient Descent without Normalization
+    std::cout << "Linear Regression using Gradient Descent without Normalization: " << std::endl;
+    LinearRegression regr_d;
 
     // Train the model using the training set
     regr_d.fit(X_train, Y_train);
@@ -59,15 +59,15 @@ int main() {
     plt::figure_size(800, 600);
     plt::plot(X.get_col(0), Y.get_col(0), "ro");
     plt::plot(X.get_col(0), Y_pred_d.get_col(0), "k");
-    plt::title("Ridge - Gradient Descent");
-    plt::save("./examples/Ridge - Gradient Descent.png");
+    plt::title("Univariate Linear Regression - Gradient Descent");
+    plt::save("./examples/UnivariateLinearRegression - Gradient Descent.png");
     plt::show();
 
     // Gradient Descent with Normalization
 
-    // Create Ridge regression object for Gradient Descent with Normalization
-    std::cout << "Ridge Regression using Gradient Descent with Normalization: " << std::endl;
-    Ridge regr_n(1, true);
+    // Create linear regression object for Gradient Descent with Normalization
+    std::cout << "Linear Regression using Gradient Descent with Normalization: " << std::endl;
+    LinearRegression regr_n(true);
 
     // Train the model using the training set
     regr_n.fit(X_train, Y_train);
@@ -91,15 +91,15 @@ int main() {
     plt::figure_size(800, 600);
     plt::plot(X.get_col(0), Y.get_col(0), "ro");
     plt::plot(X.get_col(0), Y_pred_n.get_col(0), "k");
-    plt::title("Ridge - Gradient Descent with Normalization");
-    plt::save("./examples/Ridge - Gradient Descent with Normalization.png");
+    plt::title("Univariate Linear Regression - Gradient Descent with Normalization");
+    plt::save("./examples/UnivariateLinearRegression - Gradient Descent with Normalization.png");
     plt::show();
 
     // Ordinary Least Squares
 
-    // Create Ridge regression object for Ordinary Least Squares
-    std::cout << "Ridge Regression using Ordinary Least Squares: " << std::endl;
-    Ridge regr_o(1, false, true);
+    // Create linear regression object for Ordinary Least Squares
+    std::cout << "Linear Regression using Ordinary Least Squares: " << std::endl;
+    LinearRegression regr_o(false, true);
 
     // Train the model using the training set
     regr_o.fit(X_train, Y_train);
@@ -122,8 +122,8 @@ int main() {
     plt::figure_size(800, 600);
     plt::plot(X.get_col(0), Y.get_col(0), "ro");
     plt::plot(X.get_col(0), Y_pred_o.get_col(0), "k");
-    plt::title("Ridge - Ordinary Least Squares");
-    plt::save("./examples/Ridge - Ordinary Least Squares.png");
+    plt::title("Univariate Linear Regression - Ordinary Least Squares");
+    plt::save("./examples/UnivariateLinearRegression - Ordinary Least Squares.png");
     plt::show();
 
     return 0;
