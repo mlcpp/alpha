@@ -9,7 +9,7 @@ class KMeans {
     Matrix C;
     Matrix centroid_selection(Matrix, int);
     Matrix distance(Matrix, Matrix);
-    Matrix update_mean(Matrix, Matrix, Matrix);
+    Matrix update_centroid(Matrix, Matrix, Matrix);
 
   public:
     KMeans(int, int);
@@ -37,14 +37,16 @@ Matrix KMeans::centroid_selection(Matrix X, int k) {
     return matrix.init(temp_vec);
 }
 
-
 Matrix KMeans::distance(Matrix X, Matrix C) {
     std::vector<std::vector<double>> res;
     for (int i = 0; i < X.row_length(); i++) {
         std::vector<double> row;
         for (int j = 0; j < C.row_length(); j++) {
-            Matrix sum = matrix.sum(matrix.power(X.slice(i, i+1, 0, X.col_length()) - C.slice(j, j+1, 0, C.col_length()), 2));
-            row.push_back(sum(0,0, "row"));
+            Matrix sum = matrix.sum(matrix.power(X.slice(i, i + 1, 0, X.col_length()) -
+                                                     C.slice(j, j + 1, 0, C.col_length()),
+                                                 2),
+                                    "row");
+            row.push_back(sum(0, 0));
         }
         res.push_back(row);
         row.clear();
@@ -58,11 +60,14 @@ void KMeans::fit(Matrix X) {
     for (int i = 0; i < epochs; i++) {
         Matrix temp = distance(X, C);          // (m,k)
         Matrix Z = matrix.argmin(temp, "row"); // (m,1)
-        // C = update_mean(X, C, Z);
+        C = update_centroid(X, C, Z);
     }
 }
 
-Matrix KMeans::update_mean(Matrix X, Matrix C, Matrix Z) {
+Matrix KMeans::update_centroid(Matrix X, Matrix C, Matrix Z) {
+
+    // matrix.mean(matrix.slice_select(X, Z, k, 0));
+
     std::vector<std::vector<std::vector<double>>> cluster_members;
     for (int i = 0; i < C.row_length(); i++) {
         std::vector<std::vector<double>> rows;
@@ -71,8 +76,10 @@ Matrix KMeans::update_mean(Matrix X, Matrix C, Matrix Z) {
     for (int i = 0; i < Z.row_length(); i++) {
         cluster_members[Z(i, 0)].push_back(X.get_row(i));
     }
+    assert(("K is more than the current number of clusters.", cluster_members[0].size() != 0));
     Matrix X_mean = matrix.mean(matrix.init(cluster_members[0]), "column");
     for (int i = 1; i < C.row_length(); i++) {
+        assert(("K is more than the current number of clusters.", cluster_members[i].size() != 0));
         X_mean =
             matrix.concat(X_mean, matrix.mean(matrix.init(cluster_members[i]), "column"), "row");
     }
@@ -94,7 +101,9 @@ Matrix KMeans::fit_predict(Matrix X_test) {
     return X_pred;
 }
 
-Matrix KMeans::get_centroid() { return C; }
+Matrix KMeans::get_centroid() { 
+    C.to_double(); 
+    return C; }
 
 // Method to print the KMeans object parameters in json format
 void KMeans::get_params() {
