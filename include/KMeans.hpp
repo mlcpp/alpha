@@ -43,11 +43,8 @@ Matrix KMeans::distance(Matrix X, Matrix C) {
     for (int i = 0; i < X.row_length(); i++) {
         std::vector<double> row;
         for (int j = 0; j < C.row_length(); j++) {
-            std::vector <double> sqr = matrix.power(X.slice(i, i+1, 0, X.col_length()) - C.slice(j, j+1, 0, C.col_length()), 2).get_row(0);
-            for (int k = 1; k < sqr.size(); k++) {
-                sqr[0] += sqr[k];
-            }
-            row.push_back(sqr[0]);
+            Matrix sum = matrix.sum(matrix.power(X.slice(i, i+1, 0, X.col_length()) - C.slice(j, j+1, 0, C.col_length()), 2));
+            row.push_back(sum(0,0, "row"));
         }
         res.push_back(row);
         row.clear();
