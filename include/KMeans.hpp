@@ -10,7 +10,7 @@ class KMeans {
     Matrix centroid_selection(Matrix, int);
     Matrix distance(Matrix, Matrix);
     Matrix update_centroid(Matrix, Matrix, Matrix);
-
+    bool is_fit;
   public:
     KMeans(int, int);
     void fit(Matrix);
@@ -53,6 +53,7 @@ Matrix KMeans::distance(Matrix X, Matrix C) {
     }
     return matrix.init(res);
 }
+
 // computes k optimal centroids and classifies given X points
 void KMeans::fit(Matrix X) {
     C = centroid_selection(X, n_clusters);
@@ -66,13 +67,12 @@ void KMeans::fit(Matrix X) {
 
 Matrix KMeans::update_centroid(Matrix X, Matrix C, Matrix Z) {
 
-    // matrix.mean(matrix.slice_select(X, Z, k, 0));
-
     std::vector<std::vector<std::vector<double>>> cluster_members;
     for (int i = 0; i < C.row_length(); i++) {
         std::vector<std::vector<double>> rows;
         cluster_members.push_back(rows);
     }
+
     for (int i = 0; i < Z.row_length(); i++) {
         cluster_members[Z(i, 0)].push_back(X.get_row(i));
     }
@@ -102,7 +102,6 @@ Matrix KMeans::fit_predict(Matrix X_test) {
 }
 
 Matrix KMeans::get_centroid() { 
-    C.to_double(); 
     return C; }
 
 // Method to print the KMeans object parameters in json format
