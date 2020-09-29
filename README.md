@@ -28,4 +28,3 @@ The compiled binaries will be placed in ./build/
 Execute them using `./build/<file-name>`
 
 The build folder can be cleaning by using `make clean` for a clean rebuild e.g. `make clean && make all`
-

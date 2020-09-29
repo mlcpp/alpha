@@ -1,6 +1,6 @@
 // Header files
 #include <Matrix.hpp>
-#include <RidgeRegression.hpp>
+#include <Ridge.hpp>
 #include <matplotlibcpp.hpp>
 #include <model_selection.hpp>
 namespace plt = matplotlibcpp;

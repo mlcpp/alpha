@@ -1,5 +1,5 @@
 // Header files
-#include <LassoRegression.hpp>
+#include <Lasso.hpp>
 #include <Matrix.hpp>
 #include <matplotlibcpp.hpp>
 #include <model_selection.hpp>
