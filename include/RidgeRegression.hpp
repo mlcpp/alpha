@@ -6,8 +6,8 @@
 
 class Ridge {
   private:
-    bool normalize, ols, if_fit = false;
-    int epochs;
+	bool normalize, ols, is_fit = false;
+	int epochs;
     double lr, alpha;
     Preprocessing preprocessing;
 
@@ -24,7 +24,7 @@ class Ridge {
 
 // Constructor
 Ridge::Ridge(double alpha = 1, bool normalize = false, bool ols = false, int epochs = 100,
-             double lr = 0.1) {
+	     double lr = 0.1) {
     this->alpha = alpha;
     this->normalize = normalize;
     this->ols = ols;
@@ -35,15 +35,15 @@ Ridge::Ridge(double alpha = 1, bool normalize = false, bool ols = false, int epo
 // Method to fit the Ridge model
 void Ridge::fit(Matrix X, Matrix Y) {
     if ((X.row_length() != Y.row_length()) && (X.col_length() == Y.col_length())) {
-        X.T();
-        Y.T();
+	X.T();
+	Y.T();
     }
 
     bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
     assert(("Wrong dimensions.", expr));
 
     if (normalize)
-        X = preprocessing.normalize(X, "column");
+	X = preprocessing.normalize(X, "column");
 
     // Initializing parameters with zero
     B = matrix.zeros(X.col_length() + 1, 1);
@@ -56,24 +56,24 @@ void Ridge::fit(Matrix X, Matrix Y) {
     Matrix Y_pred;
     // ols
     if (ols) {
-        Matrix L = matrix.eye(X.col_length()) * alpha;
-        L(0, 0) = 0;
-        L(0, 0);
-        Matrix C = matrix.inverse((matrix.matmul(X.T(), X)) + L);
-        Matrix D = matrix.matmul(X.T(), Y);
-        B = matrix.matmul(C, D);
+	Matrix L = matrix.eye(X.col_length()) * alpha;
+	L(0, 0) = 0;
+	L(0, 0);
+	Matrix C = matrix.inverse((matrix.matmul(X.T(), X)) + L);
+	Matrix D = matrix.matmul(X.T(), Y);
+	B = matrix.matmul(C, D);
     }
     // gradient descent
     else {
-        for (int i = 1; i <= epochs; i++) {
-            temp = matrix.concat(B.slice(0, B.row_length(), 0, 1),
-                                 matrix.zeros(B.row_length(), B.col_length() - 1), "column");
-            Y_pred = matrix.matmul(X, B);
-            B = B - ((matrix.matmul(X.T(), Y_pred - Y) + (B * alpha)) * (lr / m));
-            B = B + (temp * (alpha / m * lr));
-        }
+	for (int i = 1; i <= epochs; i++) {
+	    temp = matrix.concat(B.slice(0, B.row_length(), 0, 1),
+				 matrix.zeros(B.row_length(), B.col_length() - 1), "column");
+	    Y_pred = matrix.matmul(X, B);
+	    B = B - ((matrix.matmul(X.T(), Y_pred - Y) + (B * alpha)) * (lr / m));
+	    B = B + (temp * (alpha / m * lr));
+	}
     }
-    if_fit = true;
+    is_fit = true;
 }
 
 // Method to print the Ridge object parameters in json format
@@ -90,10 +90,10 @@ void Ridge::get_params() {
 
 // Method to predict using the Ridge model
 Matrix Ridge::predict(Matrix X) {
-    assert(("Fit the model before predicting.", if_fit));
+	assert(("Fit the model before predicting.", is_fit));
 
-    if (normalize)
-        X = preprocessing.normalize(X, "column");
+	if (normalize)
+	X = preprocessing.normalize(X, "column");
 
     // Add a column of 1's to X
     Matrix temp_x = matrix.ones(X.row_length(), 1);
@@ -115,7 +115,7 @@ double Ridge::score(Matrix Y_pred, Matrix Y) {
 
 // Method to set the Ridge object parameters
 void Ridge::set_params(double alpha = 1, bool normalize = false, bool ols = false, int epochs = 100,
-                       double lr = 0.1) {
+		       double lr = 0.1) {
     this->alpha = alpha;
     this->normalize = normalize;
     this->ols = ols;
