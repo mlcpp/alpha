@@ -8,7 +8,7 @@ namespace plt = matplotlibcpp;
 /* Example program
 
 Read csv files to get a Matrix object.
-Slice the Matrix object according to our needs.
+Slice the Matrix object to a suitable size.
 Run Ridge Regression, print scores and plot predictions in 3 ways:
 
 1. Gradient Descent without Normalization
@@ -16,11 +16,11 @@ Run Ridge Regression, print scores and plot predictions in 3 ways:
 3. Ordinary Least Squares
 */
 int main() {
-	// Specify backend renderer for matplotlib
-	plt::backend("GTK3Agg");
+    // Specify backend renderer for matplotlib
+    plt::backend("GTK3Agg");
 
-	// Load the dataset
-	Matrix mat = read_csv("./datasets/blobs_linear/blobs_linear.csv");
+    // Load the dataset
+    Matrix mat = read_csv("./datasets/blobs_linear/blobs_linear.csv");
 
     // Slice one feature for data from mat
     Matrix X = mat.slice(1, mat.row_length(), 0, 1);
