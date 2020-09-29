@@ -8,7 +8,7 @@ namespace plt = matplotlibcpp;
 // Example program
 
 // Read csv files to get a Matrix object.
-// Slice the Matrix object according to a suitable size.
+// Slice the Matrix object to a suitable size.
 // Run Linear Regression, print scores and plot predictions in 3 ways:
 
 // 1. Gradient Descent without Normalization
