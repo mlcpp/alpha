@@ -6,7 +6,7 @@
 
 class Lasso {
   private:
-    bool normalize, if_fit = false;
+    bool normalize, is_fit = false;
     int epochs;
     double alpha;
     Preprocessing preprocessing;
@@ -66,7 +66,7 @@ void Lasso::fit(Matrix X, Matrix Y) {
             B(j, 0) = S(p) / z;
         }
     }
-    if_fit = true;
+    is_fit = true;
 }
 
 // Method to print the Lasso object parameters in json format
@@ -81,7 +81,7 @@ void Lasso::get_params() {
 
 // Method to predict using the Lasso model
 Matrix Lasso::predict(Matrix X) {
-    assert(("Fit the model before predicting.", if_fit));
+    assert(("Fit the model before predicting.", is_fit));
 
     if (normalize)
         X = preprocessing.normalize(X, "column");
@@ -113,6 +113,7 @@ void Lasso::set_params(double alpha = 1, bool normalize = false, int epochs = 10
 
 // Helper methods
 
+// Method to return soft thresholding
 double Lasso::S(double p) {
     if (p < -alpha)
         return p + alpha;

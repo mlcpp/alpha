@@ -6,7 +6,7 @@
 
 class Ridge {
   private:
-    bool normalize, ols, if_fit = false;
+    bool normalize, ols, is_fit = false;
     int epochs;
     double lr, alpha;
     Preprocessing preprocessing;
@@ -73,7 +73,7 @@ void Ridge::fit(Matrix X, Matrix Y) {
             B = B + (temp * (alpha / m * lr));
         }
     }
-    if_fit = true;
+    is_fit = true;
 }
 
 // Method to print the Ridge object parameters in json format
@@ -90,7 +90,7 @@ void Ridge::get_params() {
 
 // Method to predict using the Ridge model
 Matrix Ridge::predict(Matrix X) {
-    assert(("Fit the model before predicting.", if_fit));
+    assert(("Fit the model before predicting.", is_fit));
 
     if (normalize)
         X = preprocessing.normalize(X, "column");
