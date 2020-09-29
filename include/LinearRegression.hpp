@@ -6,7 +6,7 @@
 
 class LinearRegression {
   private:
-    bool normalize, ols, if_fit = false;
+    bool normalize, ols, is_fit = false;
     int epochs;
     double lr;
     Preprocessing preprocessing;
@@ -39,7 +39,7 @@ void LinearRegression::fit(Matrix X, Matrix Y) {
     }
 
     bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
-    assert(("Wrong dimensions.", expr));
+    assert(("The row and column dimensions should be same.", expr));
 
     if (normalize)
         X = preprocessing.normalize(X, "column");
@@ -66,7 +66,7 @@ void LinearRegression::fit(Matrix X, Matrix Y) {
             B = B - (matrix.matmul(X.T(), Y_pred - Y)) * (lr / m);
         }
     }
-    if_fit = true;
+    is_fit = true;
 }
 
 // Method to print the Linear Regression object parameters in json format
@@ -82,7 +82,7 @@ void LinearRegression::get_params() {
 
 // Method to predict using the Linear Regression model
 Matrix LinearRegression::predict(Matrix X) {
-    assert(("Fit the model before predicting.", if_fit));
+    assert(("Fit the model before predicting.", is_fit));
 
     if (normalize)
         X = preprocessing.normalize(X, "column");
