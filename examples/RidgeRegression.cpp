@@ -126,7 +126,7 @@ int main() {
     plt::plot(X.get_col(0), Y.get_col(0), "bD");
     plt::plot(X.get_col(0), Y_pred_ols.get_col(0), "k");
     plt::title("Ridge - Ordinary Least Squares");
-    plt::save("./examples/Ridge - Ordinary Least Squares.png");
+    plt::save("./build/plots/Ridge - Ordinary Least Squares.png");
     plt::show();
 
     return 0;
