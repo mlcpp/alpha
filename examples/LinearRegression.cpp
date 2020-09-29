@@ -1,26 +1,26 @@
-// Header files
+// Include necessary header files
 #include <LinearRegression.hpp>
 #include <Matrix.hpp>
 #include <matplotlibcpp.hpp>
 #include <model_selection.hpp>
 namespace plt = matplotlibcpp;
 
-/* Example program
+// Example program
 
-Read csv files to get a Matrix object.
-Slice the Matrix object according to our needs.
-Run Linear Regression, print scores and plot predictions in 3 ways:
+// Read csv files to get a Matrix object.
+// Slice the Matrix object according to a suitable size.
+// Run Linear Regression, print scores and plot predictions in 3 ways:
 
-1. Gradient Descent without Normalization
-2. Gradient Descent with Normalization
-3. Ordinary Least Squares
-*/
+// 1. Gradient Descent without Normalization
+// 2. Gradient Descent with Normalization
+// 3. Ordinary Least Squares
+
 int main() {
     // Load the dataset
     Matrix mat = read_csv("./datasets/blobs_linear/blobs_linear.csv");
+
     // Slice one feature for data from mat
     Matrix X = mat.slice(1, mat.row_length(), 0, 1);
-
     // Slice targets from mat
     Matrix Y = mat.slice(1, mat.row_length(), mat.col_length() - 1, mat.col_length());
 
@@ -60,7 +60,7 @@ int main() {
     plt::plot(X.get_col(0), Y.get_col(0), "ro");
     plt::plot(X.get_col(0), Y_pred_d.get_col(0), "k");
     plt::title("Univariate Linear Regression - Gradient Descent");
-    plt::save("./examples/UnivariateLinearRegression - Gradient Descent.png");
+    plt::save("./build/plots/UnivariateLinearRegression - Gradient Descent.png");
     plt::show();
 
     // Gradient Descent with Normalization
@@ -92,7 +92,7 @@ int main() {
     plt::plot(X.get_col(0), Y.get_col(0), "ro");
     plt::plot(X.get_col(0), Y_pred_n.get_col(0), "k");
     plt::title("Univariate Linear Regression - Gradient Descent with Normalization");
-    plt::save("./examples/UnivariateLinearRegression - Gradient Descent with Normalization.png");
+    plt::save("./build/plots/UnivariateLinearRegression - Gradient Descent with Normalization.png");
     plt::show();
 
     // Ordinary Least Squares
@@ -123,7 +123,7 @@ int main() {
     plt::plot(X.get_col(0), Y.get_col(0), "ro");
     plt::plot(X.get_col(0), Y_pred_o.get_col(0), "k");
     plt::title("Univariate Linear Regression - Ordinary Least Squares");
-    plt::save("./examples/UnivariateLinearRegression - Ordinary Least Squares.png");
+    plt::save("./build/plots/UnivariateLinearRegression - Ordinary Least Squares.png");
     plt::show();
 
     return 0;

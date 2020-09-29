@@ -9,17 +9,15 @@ CPP_FLAGS = -std=c++17 -g -o
 # create build directory
 CREATE_DIR : $(shell mkdir -p ./build && mkdir -p ./build/plots)
 
-ext: make -f Makefile.ext
-
 # compile /examples dir with options to compile single
-%: $(CREATE_DIR) ./examples/%.cpp
+%: $(CREATE_DIR) ./examples/extended/%.cpp
 	@# @echo compiling $@.cpp
 	@$(CPP) $^ $(ALPHA_FLAGS) $(LIB_FLAGS) $(MATPLOTLIBCPP_FLAGS)  $(CPP_FLAGS) ./build/$@
 	@echo executable ./build/$@ created.
 
 
 # or all files
-all: $(patsubst ./examples/%.cpp, %, $(wildcard ./examples/*.cpp))
+all: $(patsubst ./examples/extended/%.cpp, %, $(wildcard ./examples/extended/*.cpp))
 
 clean:
 	rm -rf ./build
