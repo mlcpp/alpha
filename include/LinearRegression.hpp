@@ -39,7 +39,7 @@ void LinearRegression::fit(Matrix X, Matrix Y) {
     }
 
     bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
-    assert(("The row and column dimensions should be same.", expr));
+    assert(("Wrong dimensions.", expr));
 
     if (normalize)
         X = preprocessing.normalize(X, "column");
