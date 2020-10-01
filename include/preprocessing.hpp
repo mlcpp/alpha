@@ -25,4 +25,16 @@ Matrix Preprocessing::normalize(Matrix mat, std::string dim) {
     return result;
 }
 
+class LabelEncoder {
+  private:
+    Matrix labels;
+
+  public:
+    void fit(Matrix Y);
+    Matrix fit_transform(Matrix Y);
+    Matrix get_params();
+    void set_params();
+    Matrix transform(Matrix Y);
+}
+
 #endif /* _preprocessing_h_ */
