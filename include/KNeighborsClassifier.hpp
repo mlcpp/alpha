@@ -9,7 +9,6 @@ class KNeighborsClassifier {
     bool is_fit;
     int n_neighbors;
     Matrix X, Y, labels;
-    Matrix select(Matrix, int);
     std::vector<double> select_vec(Matrix, int);
 
   public:
@@ -57,7 +56,10 @@ Matrix KNeighborsClassifier::KNeighbors(std::vector<double> P) {
     Matrix X = matrix.init(vec);
     Matrix dist = distance(this->X, X.slice(0, 1, 0, X.col_length()));
     // dist.print();
-    labels = select(dist, n_neighbors);
+    std::vector<std::vector<double>> res;
+    res.push_back(select_vec(dist, n_neighbors));
+    // labels = select(dist, n_neighbors);
+    labels = matrix.init(res);
     return labels;
 }
 
@@ -100,50 +102,6 @@ Matrix KNeighborsClassifier::distance(Matrix X, Matrix C) {
         res.push_back(row);
         row.clear();
     }
-    return matrix.init(res);
-}
-
-Matrix KNeighborsClassifier::select(Matrix dist, int k) {
-    // tuple of Y and dist
-    std::vector<std::tuple<double, double>> v_t;
-    for (int i = 0; i < dist.row_length(); i++) {
-        // std::cout << "Dist: " << dist(i, 0) << " Label: " << Y(i, 0) << std::endl;
-        v_t.push_back(std::make_tuple(dist(i, 0), Y(i, 0)));
-    }
-    // sort tuple<dist, Y> keeping Y intact
-    // std::cout << "After sorting: \n";
-    sort(v_t.begin(), v_t.end());
-    // for ( const auto& i : v_t ) {
-    //	std::cout << "Dist: " << std::get<0>(i) << " Label: " <<std::get<1>(i) << std::endl;
-    // }
-    std::vector<double> row;
-    std::vector<bool> visited(k, false);
-    int max_count = 0;
-    double val = 0.0;
-    // select first k rows
-    for (int i = 0; i < k; i++) {
-        // find the majority of rows using Y labels
-        if (visited[i] == true) {
-            continue;
-        }
-        int count = 0;
-        for (int j = 0; j < k; j++) {
-            if (Y(i, 0) == Y(j, 0)) {
-                visited[j] = true;
-                count++;
-            }
-        }
-        // std::cout << std::get<1>(v_t[i]) << " " << count << std::endl;
-        if (count > max_count) {
-            max_count = count;
-            val = std::get<1>(v_t[i]);
-        }
-    }
-    // std::cout << val << '\n';
-    row.push_back(val);
-    std::vector<std::vector<double>> res;
-    res.push_back(row);
-    // return the majority label
     return matrix.init(res);
 }
 
