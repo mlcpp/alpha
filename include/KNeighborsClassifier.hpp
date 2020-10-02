@@ -15,10 +15,9 @@ class KNeighborsClassifier {
     KNeighborsClassifier(int);
     void fit(Matrix, Matrix);
     void get_params();
-    long double score(Matrix, Matrix, bool);
     Matrix KNeighbors(std::vector<double>);
     Matrix predict(Matrix);
-    Matrix predict_proba(Matrix);
+    long double score(Matrix, Matrix, bool);
     void set_params(int);
 };
 
@@ -28,27 +27,22 @@ KNeighborsClassifier::KNeighborsClassifier(int n_neighbors = 3) {
     is_fit = false;
 }
 
-// Method to fit
+// Method to fit the KNeighboursClassifier model
 void KNeighborsClassifier::fit(Matrix X, Matrix Y) {
     this->X = X;
     this->Y = Y;
     is_fit = true;
 }
 
-// Method to calculate the score
-long double KNeighborsClassifier::score(Matrix Y_true, Matrix Y_pred, bool normalize = true) {
-    long double count = 0;
-    for (int i = 0; i < Y_true.row_length(); i++) {
-        if (Y_true(i, 0) == Y_pred(i, 0)) {
-            count++;
-        }
-    }
-    if (!normalize)
-        return count;
-    else
-        return count / (double)Y_true.row_length();
+// Method to print the KNeighborsClassifier object parameters in json format
+void KNeighborsClassifier::get_params() {
+    std::cout << std::boolalpha;
+    std::cout << "[" << std::endl;
+    std::cout << "\t \"n_neighbors\": \"" << n_neighbors << " \" " << std::endl;
+    std::cout << "]" << std::endl;
 }
 
+// Method to predict the KNeighbours of a single point
 Matrix KNeighborsClassifier::KNeighbors(std::vector<double> P) {
     assert(("Fit the model before predicting.", is_fit));
     std::vector<std::vector<double>> vec;
@@ -63,7 +57,7 @@ Matrix KNeighborsClassifier::KNeighbors(std::vector<double> P) {
     return labels;
 }
 
-// Method to
+// Method to predict the KNeighbors of a matrix
 Matrix KNeighborsClassifier::predict(Matrix X) {
     std::vector<std::vector<double>> res;
     assert(("Fit the model before predicting.", is_fit));
@@ -76,12 +70,18 @@ Matrix KNeighborsClassifier::predict(Matrix X) {
     return labels;
 }
 
-// Method to print the KNeighborsClassifier object parameters in json format
-void KNeighborsClassifier::get_params() {
-    std::cout << std::boolalpha;
-    std::cout << "[" << std::endl;
-    std::cout << "\t \"n_neighbors\": \"" << n_neighbors << " \" " << std::endl;
-    std::cout << "]" << std::endl;
+// Method to calculate the score of the model
+long double KNeighborsClassifier::score(Matrix Y_true, Matrix Y_pred, bool normalize = true) {
+    long double count = 0;
+    for (int i = 0; i < Y_true.row_length(); i++) {
+        if (Y_true(i, 0) == Y_pred(i, 0)) {
+            count++;
+        }
+    }
+    if (!normalize)
+        return count;
+    else
+        return count / (double)Y_true.row_length();
 }
 
 // Method to set the KNeighborsClassifier object parameters
@@ -109,15 +109,10 @@ std::vector<double> KNeighborsClassifier::select_vec(Matrix dist, int k) {
     // tuple of Y and dist
     std::vector<std::tuple<double, double>> v_t;
     for (int i = 0; i < dist.row_length(); i++) {
-        // std::cout << "Dist: " << dist(i, 0) << " Label: " << Y(i, 0) << std::endl;
         v_t.push_back(std::make_tuple(dist(i, 0), Y(i, 0)));
     }
     // sort tuple<dist, Y> keeping Y intact
-    // std::cout << "After sorting: \n";
     sort(v_t.begin(), v_t.end());
-    // for ( const auto& i : v_t ) {
-    //	std::cout << "Dist: " << std::get<0>(i) << " Label: " <<std::get<1>(i) << std::endl;
-    // }
     std::vector<double> row;
     std::vector<bool> visited(k, false);
     int max_count = 0;
@@ -135,13 +130,11 @@ std::vector<double> KNeighborsClassifier::select_vec(Matrix dist, int k) {
                 count++;
             }
         }
-        // std::cout << std::get<1>(v_t[i]) << " " << count << std::endl;
         if (count > max_count) {
             max_count = count;
             val = std::get<1>(v_t[i]);
         }
     }
-    // std::cout << val << '\n';
     row.push_back(val);
     return row;
 }
