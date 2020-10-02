@@ -21,6 +21,8 @@ class PCA {
     void get_params();
     Matrix get_precision();
     Matrix inverse_transform(Matrix);
+    double score(Matrix);
+    Matrix score_samples(Matrix);
     void set_params(int);
     Matrix transform(Matrix);
 };
@@ -65,6 +67,20 @@ void PCA::get_params() {
 Matrix PCA::inverse_transform(Matrix Z) {
     Matrix X_recovered = (matrix.matmul(Ureduce, Z.T())).T();
     return X_recovered;
+}
+
+double PCA::score(Matrix X) { return matrix.mean(score_samples(X), "row")(0, 0); }
+
+Matrix PCA::score_samples(Matrix X) {
+    Matrix Xr = X - matrix.mean(X, "column");
+    int n_features = X.col_length();
+    Matrix precision = get_precision();
+    Matrix log_like = matrix.sum((Xr * (matrix.matmul(Xr, precision))), "column") * -0.5;
+    log_like = log_like - (((log(2 * 3.14) * n_features) -
+                            log(matrix.determinant(precision, precision.row_length()))) *
+                           0.5);
+
+    return log_like;
 }
 
 // Method to set the PCA object parameters
