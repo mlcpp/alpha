@@ -1,0 +1,6 @@
+This dataset is generated from sklearn.datasets.make_regression() with params:
+
+n_samples=100
+n_features=1
+noise=20
+random_state=0

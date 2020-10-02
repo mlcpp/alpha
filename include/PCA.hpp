@@ -32,6 +32,9 @@ PCA::PCA(int n_components = -1) { this->n_components = n_components; }
 
 // Method to fit the PCA model
 void PCA::fit(Matrix X) {
+    if (n_components == -1)
+        n_components = X.col_length();
+
     Sigma = matrix.matmul(X.T(), X) / (X.row_length());
     Eigen::MatrixXd Sigma_m = convert2eigen(Sigma);
     Eigen::JacobiSVD<Eigen::MatrixXd> svd(Sigma_m, Eigen::ComputeThinU | Eigen::ComputeThinV);
