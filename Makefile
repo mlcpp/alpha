@@ -2,7 +2,7 @@
 
 CPP = g++
 ALPHA_FLAGS = -Iinclude/
-LIB_FLAGS = -Ilib/ -Ilib/Matrix/include/
+LIB_FLAGS = -Ilib/ -Ilib/Matrix/include/ -Ilib/Eigen
 MATPLOTLIBCPP_FLAGS = -I/usr/include/python3.8 -I/usr/lib/python3.8 -lpython3.8
 CPP_FLAGS = -std=c++17 -g -o
 
