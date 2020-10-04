@@ -1,19 +1,14 @@
 // Include necessary header files
 #include <Matrix.hpp>
 #include <PCA.hpp>
-#include <matplotlibcpp.hpp>
 #include <preprocessing.hpp>
-namespace plt = matplotlibcpp;
 
 // Example program
 
 // Read csv files to get a Matrix object.
 // Slice the Matrix object to remove header.
-// Fitting and transforming the dataset using PSA model.
-
+// Fitting and transforming the dataset using PCA model.
 int main() {
-    // Specify backend renderer for matplotlib
-    plt::backend("GTK3Agg");
     // Load the dataset
     Matrix mat = read_csv("./datasets/blobs_pca/blobs_pca.csv");
 

@@ -7,13 +7,12 @@ class PCA {
   private:
     bool is_fit = false;
     int n_components;
+    Matrix Ureduce, Sigma;
 
     Eigen::MatrixXd convert2eigen(Matrix);
     Matrix convert2matrix(Eigen::MatrixXd);
 
   public:
-    Matrix Ureduce, Sigma;
-
     PCA(int);
     void fit(Matrix);
     Matrix fit_transform(Matrix);

@@ -3,10 +3,10 @@
 
 #include <Eigen/SVD>
 #include <Matrix.hpp>
-#include <assert.h>
+#include <cassert>
+#include <cmath>
+#include <cstdlib>
 #include <iostream>
-#include <math.h>
-#include <stdlib.h>
 #include <tuple>
 #include <vector>
 
