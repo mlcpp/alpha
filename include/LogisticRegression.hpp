@@ -41,7 +41,7 @@ void LogisticRegression::fit(Matrix X, Matrix Y) {
         Y.T();
     }
 
-    bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
+    bool expr = (X.row_length() == Y.row_length()) || (X.col_length() == Y.col_length());
     assert(("Wrong dimensions.", expr));
 
     // Initializing parameters with zero
@@ -94,7 +94,14 @@ Matrix LogisticRegression::predict(Matrix X) {
     Matrix temp_x = matrix.ones(X.row_length(), 1);
     X = matrix.concat(temp_x, X, "column");
 
-    Matrix Y_pred = sigmoid(matrix.matmul(X, B));
+    Matrix Y_pred = matrix.matmul(X, B);
+    for (int i = 0; i < Y_pred.row_length(); i++) {
+        if (Y_pred(i, 0) >= 0)
+            Y_pred(i, 0) = 1;
+        else
+            Y_pred(i, 0) = 0;
+    }
+    Y_pred(Y_pred.row_length() - 1, 0);
     return Y_pred;
 }
 

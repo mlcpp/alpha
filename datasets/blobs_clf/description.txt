@@ -1,0 +1,8 @@
+This dataset is generated from sklearn.datasets.make_blobs() with params:
+
+n_samples=150
+n_features=2
+centers=2
+cluster_std=0.5
+shuffle=True
+random_state=0

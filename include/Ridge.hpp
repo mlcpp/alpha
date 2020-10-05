@@ -38,7 +38,7 @@ void Ridge::fit(Matrix X, Matrix Y) {
         Y.T();
     }
 
-    bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
+    bool expr = (X.row_length() == Y.row_length()) || (X.col_length() == Y.col_length());
     assert(("Wrong dimensions.", expr));
 
     if (to_normalize)
