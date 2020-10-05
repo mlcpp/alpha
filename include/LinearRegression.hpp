@@ -4,12 +4,11 @@
 #include <all.hpp>
 #include <preprocessing.hpp>
 
-class LinearRegression {
+class LinearRegression : private Preprocessing {
   private:
-    bool normalize, ols, is_fit = false;
+    bool to_normalize, ols, is_fit = false;
     int epochs;
     double lr;
-    Preprocessing preprocessing;
 
   public:
     Matrix B;
@@ -25,7 +24,7 @@ class LinearRegression {
 // Constructor
 LinearRegression::LinearRegression(bool normalize = false, bool ols = false, int epochs = 100,
                                    double lr = 0.1) {
-    this->normalize = normalize;
+    to_normalize = normalize;
     this->ols = ols;
     this->epochs = epochs;
     this->lr = lr;
@@ -41,8 +40,8 @@ void LinearRegression::fit(Matrix X, Matrix Y) {
     bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
     assert(("Wrong dimensions.", expr));
 
-    if (normalize)
-        X = preprocessing.normalize(X, "column");
+    if (to_normalize)
+        X = normalize(X, "column");
 
     // Initializing parameters with zero
     B = matrix.zeros(X.col_length() + 1, 1);
@@ -73,7 +72,7 @@ void LinearRegression::fit(Matrix X, Matrix Y) {
 void LinearRegression::get_params() {
     std::cout << std::boolalpha;
     std::cout << "[" << std::endl;
-    std::cout << "\t \"normalize\": \"" << normalize << "\"," << std::endl;
+    std::cout << "\t \"normalize\": \"" << to_normalize << "\"," << std::endl;
     std::cout << "\t \"ols\": \"" << ols << "\"," << std::endl;
     std::cout << "\t \"epochs\": \"" << epochs << "\"," << std::endl;
     std::cout << "\t \"lr\": \"" << lr << "\"" << std::endl;
@@ -84,8 +83,8 @@ void LinearRegression::get_params() {
 Matrix LinearRegression::predict(Matrix X) {
     assert(("Fit the model before predicting.", is_fit));
 
-    if (normalize)
-        X = preprocessing.normalize(X, "column");
+    if (to_normalize)
+        X = normalize(X, "column");
 
     // Add a column of 1's to X
     Matrix temp_x = matrix.ones(X.row_length(), 1);
@@ -108,7 +107,7 @@ double LinearRegression::score(Matrix Y_pred, Matrix Y) {
 // Method to set the Linear Regression object parameters
 void LinearRegression::set_params(bool normalize = false, bool ols = false, int epochs = 100,
                                   double lr = 0.1) {
-    this->normalize = normalize;
+    to_normalize = normalize;
     this->ols = ols;
     this->epochs = epochs;
     this->lr = lr;

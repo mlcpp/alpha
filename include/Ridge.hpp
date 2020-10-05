@@ -4,12 +4,11 @@
 #include <all.hpp>
 #include <preprocessing.hpp>
 
-class Ridge {
+class Ridge : private Preprocessing {
   private:
-    bool normalize, ols, is_fit = false;
+    bool to_normalize, ols, is_fit = false;
     int epochs;
     double lr, alpha;
-    Preprocessing preprocessing;
 
   public:
     Matrix B;
@@ -26,7 +25,7 @@ class Ridge {
 Ridge::Ridge(double alpha = 1, bool normalize = false, bool ols = false, int epochs = 100,
              double lr = 0.1) {
     this->alpha = alpha;
-    this->normalize = normalize;
+    to_normalize = normalize;
     this->ols = ols;
     this->epochs = epochs;
     this->lr = lr;
@@ -42,8 +41,8 @@ void Ridge::fit(Matrix X, Matrix Y) {
     bool expr = (X.row_length() == Y.row_length()) && (X.col_length() == Y.col_length());
     assert(("Wrong dimensions.", expr));
 
-    if (normalize)
-        X = preprocessing.normalize(X, "column");
+    if (to_normalize)
+        X = normalize(X, "column");
 
     // Initializing parameters with zero
     B = matrix.zeros(X.col_length() + 1, 1);
@@ -81,7 +80,7 @@ void Ridge::get_params() {
     std::cout << std::boolalpha;
     std::cout << "[" << std::endl;
     std::cout << "\t \"alpha\": \"" << alpha << "\"," << std::endl;
-    std::cout << "\t \"normalize\": \"" << normalize << "\"," << std::endl;
+    std::cout << "\t \"normalize\": \"" << to_normalize << "\"," << std::endl;
     std::cout << "\t \"ols\": \"" << ols << "\"," << std::endl;
     std::cout << "\t \"epochs\": \"" << epochs << "\"," << std::endl;
     std::cout << "\t \"lr\": \"" << lr << "\"" << std::endl;
@@ -92,8 +91,8 @@ void Ridge::get_params() {
 Matrix Ridge::predict(Matrix X) {
     assert(("Fit the model before predicting.", is_fit));
 
-    if (normalize)
-        X = preprocessing.normalize(X, "column");
+    if (to_normalize)
+        X = normalize(X, "column");
 
     // Add a column of 1's to X
     Matrix temp_x = matrix.ones(X.row_length(), 1);
@@ -117,7 +116,7 @@ double Ridge::score(Matrix Y_pred, Matrix Y) {
 void Ridge::set_params(double alpha = 1, bool normalize = false, bool ols = false, int epochs = 100,
                        double lr = 0.1) {
     this->alpha = alpha;
-    this->normalize = normalize;
+    to_normalize = normalize;
     this->ols = ols;
     this->epochs = epochs;
     this->lr = lr;
