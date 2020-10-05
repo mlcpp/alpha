@@ -52,7 +52,7 @@ int main() {
     plt::show();
     for (int i = 1; i < 4; i++) {
         knn.set_params(i);
-        Matrix label = knn.KNeighbors(P);
+        Matrix label = knn.kneighbors(P);
         std::cout << "For K = " << i << " : ";
         switch ((int)label(0, 0)) {
         case 0:

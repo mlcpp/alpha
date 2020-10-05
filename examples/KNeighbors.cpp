@@ -46,13 +46,8 @@ int main() {
     Matrix Y_pred = knn.predict(X_test);
     plt::plot(X_test.get_col(0), X_test.get_col(1), "mo");
     plt::show();
-    // std::cout << "Printing Y_pred" <<std::endl;
-    // Y_pred.print();
-
-    // std::cout << "Score: " << km.score() << std::endl;
 
     // Comparison of predicted and actual cluster label
-    std::cout << "KNN Model Score: " << knn.score(Y_test, Y_pred, false) << std::endl;
-    std::cout << "KNN Model Score (Normalized): " << knn.score(Y_test, Y_pred, true) << std::endl;
+    std::cout << "KNN Model Score (Normalized): " << knn.score(Y_pred, Y_test) << std::endl;
     return 0;
 }

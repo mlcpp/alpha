@@ -15,9 +15,9 @@ class KNeighborsClassifier {
     KNeighborsClassifier(int);
     void fit(Matrix, Matrix);
     void get_params();
-    Matrix KNeighbors(std::vector<double>);
+    Matrix kneighbors(std::vector<double>);
     Matrix predict(Matrix);
-    long double score(Matrix, Matrix, bool);
+    double score(Matrix, Matrix);
     void set_params(int);
 };
 
@@ -43,16 +43,14 @@ void KNeighborsClassifier::get_params() {
 }
 
 // Method to predict the KNeighbours of a single point
-Matrix KNeighborsClassifier::KNeighbors(std::vector<double> P) {
+Matrix KNeighborsClassifier::kneighbors(std::vector<double> P) {
     assert(("Fit the model before predicting.", is_fit));
     std::vector<std::vector<double>> vec;
     vec.push_back(P);
     Matrix X = matrix.init(vec);
     Matrix dist = distance(this->X, X.slice(0, 1, 0, X.col_length()));
-    // dist.print();
     std::vector<std::vector<double>> res;
     res.push_back(select_vec(dist, n_neighbors));
-    // labels = select(dist, n_neighbors);
     labels = matrix.init(res);
     return labels;
 }
@@ -63,7 +61,6 @@ Matrix KNeighborsClassifier::predict(Matrix X) {
     assert(("Fit the model before predicting.", is_fit));
     for (int i = 0; i < X.row_length(); i++) {
         Matrix dist = distance(this->X, X.slice(i, i + 1, 0, X.col_length()));
-        // labels = matrix.concat(label, select(dist, n_neighbors), "col"); // "row" gave error
         res.push_back(select_vec(dist, n_neighbors));
     }
     labels = matrix.init(res);
@@ -71,17 +68,14 @@ Matrix KNeighborsClassifier::predict(Matrix X) {
 }
 
 // Method to calculate the score of the model
-long double KNeighborsClassifier::score(Matrix Y_true, Matrix Y_pred, bool normalize = true) {
-    long double count = 0;
+double KNeighborsClassifier::score(Matrix Y_pred, Matrix Y_true) {
+    double count = 0;
     for (int i = 0; i < Y_true.row_length(); i++) {
         if (Y_true(i, 0) == Y_pred(i, 0)) {
             count++;
         }
     }
-    if (!normalize)
-        return count;
-    else
-        return count / (double)Y_true.row_length();
+    return count / Y_true.row_length();
 }
 
 // Method to set the KNeighborsClassifier object parameters
