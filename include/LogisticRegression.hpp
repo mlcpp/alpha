@@ -152,6 +152,8 @@ void LogisticRegression::set_params(std::string penalty = "l2", int epochs = 100
 
 // Helper methods
 
+// Helper method to calculate sigmoid activation function
+// https://en.wikipedia.org/wiki/Sigmoid_function
 Matrix LogisticRegression::sigmoid(Matrix mat) {
     mat = matrix.exp(-mat);
     mat = mat + 1;
