@@ -131,12 +131,14 @@ Matrix LogisticRegression::predict_proba(Matrix X) {
 
 // Method to calculate the score of the predictions
 double LogisticRegression::score(Matrix Y_pred, Matrix Y) {
-    double Y_mean = ((matrix.mean(Y, "column"))(0, 0));
-    double residual_sum_of_squares = (matrix.matmul((Y_pred - Y).T(), (Y_pred - Y)))(0, 0);
-    double total_sum_of_squares = (matrix.matmul((Y - Y_mean).T(), (Y - Y_mean)))(0, 0);
-    double score = (1 - (residual_sum_of_squares / total_sum_of_squares));
+    double count = 0;
+    for (int i = 0; i < Y.row_length(); i++) {
+        if (Y(i, 0) == Y_pred(i, 0)) {
+            count++;
+        }
+    }
 
-    return score;
+    return count / Y.row_length();
 }
 
 // Method to set the Logistic Regression object parameters
