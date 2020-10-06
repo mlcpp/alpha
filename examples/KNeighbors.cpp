@@ -48,6 +48,6 @@ int main() {
     plt::show();
 
     // Comparison of predicted and actual cluster label
-    std::cout << "KNN Model Score (Normalized): " << knn.score(Y_pred, Y_test) << std::endl;
+    std::cout << "KNN Model Score: " << knn.score(Y_pred, Y_test) << std::endl;
     return 0;
 }
