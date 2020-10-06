@@ -69,10 +69,10 @@ int main() {
     plt::show();
 
     plt::figure_size(800, 600);
-    plt::named_plot("Predicted: Class 0", matrix.slice_select(X, Y_pred, 0, 0.0).get_col(0),
-                    matrix.slice_select(X, Y_pred, 0, 1.0).get_col(0), "mo");
-    plt::named_plot("Predicted: Class 1", matrix.slice_select(X, Y_pred, 1, 0.0).get_col(0),
-                    matrix.slice_select(X, Y_pred, 1, 1.0).get_col(0), "k^");
+    plt::named_plot("Predicted: Class 0", matrix.slice_select(X, Y_pred, 0, 0).get_col(0),
+                    matrix.slice_select(X, Y_pred, 0, 1).get_col(0), "mo");
+    plt::named_plot("Predicted: Class 1", matrix.slice_select(X, Y_pred, 1, 0).get_col(0),
+                    matrix.slice_select(X, Y_pred, 1, 1).get_col(0), "k^");
     plt::title("Logistic Regression without Regularization - Predictions");
     plt::legend();
     plt::save("./build/plots/LogisticRegression without Regularization.png");
@@ -112,10 +112,10 @@ int main() {
     plt::show();
 
     plt::figure_size(800, 600);
-    plt::named_plot("Predicted: Class 0", matrix.slice_select(X, Y_pred, 0, 0.0).get_col(0),
-                    matrix.slice_select(X, Y_pred, 0, 1.0).get_col(0), "mo");
-    plt::named_plot("Predicted: Class 1", matrix.slice_select(X, Y_pred, 1, 0.0).get_col(0),
-                    matrix.slice_select(X, Y_pred, 1, 1.0).get_col(0), "k^");
+    plt::named_plot("Predicted: Class 0", matrix.slice_select(X, Y_pred, 0, 0).get_col(0),
+                    matrix.slice_select(X, Y_pred, 0, 1).get_col(0), "mo");
+    plt::named_plot("Predicted: Class 1", matrix.slice_select(X, Y_pred, 1, 0).get_col(0),
+                    matrix.slice_select(X, Y_pred, 1, 1).get_col(0), "k^");
     plt::title("Logistic Regression with Regularization - Predictions");
     plt::legend();
     plt::save("./build/plots/LogisticRegression with Regularization.png");

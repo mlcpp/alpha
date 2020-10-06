@@ -1,15 +1,21 @@
-#include <cstdlib>
-#include <iostream>
+#include <Matrix.hpp>
 #include <matplotlibcpp.hpp>
-#include <vector>
+namespace plt = matplotlibcpp;
 
 int main() {
-    std::vector<int> x, y;
-    for (int i = 1; i < 30; i++) {
-        y.push_back(rand() % 100);
-        x.push_back(i);
-    }
+    // Specify backend renderer for matplotlib
+    plt::backend("GTK3Agg");
+    // Load the dataset
+    Matrix mat = read_csv("./datasets/blobs_pca/blobs_pca.csv");
 
-    matplotlibcpp::plot(x, y, "ro");
-    matplotlibcpp::show();
+    // Remove the header description from the dataset
+    Matrix X = mat.slice(1, mat.row_length(), 0, mat.col_length());
+
+    // Convert the data from string to double
+    X.to_double();
+
+    plt::figure_size(800, 600);
+    plt::plot(X.get_col(0), X.get_col(1), "ro");
+    plt::title("Example Graph");
+    plt::show();
 }
