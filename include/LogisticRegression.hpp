@@ -23,6 +23,7 @@ class LogisticRegression {
     Matrix predict_proba(Matrix);
     double score(Matrix, Matrix);
     void set_params(std::string, int, double, double);
+    ~LogisticRegression() {}
 };
 
 // Constructor

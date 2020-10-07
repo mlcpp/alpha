@@ -24,6 +24,7 @@ class PCA {
     Matrix score_samples(Matrix);
     void set_params(int);
     Matrix transform(Matrix);
+    ~PCA() {}
 };
 
 // Constructor
@@ -52,10 +53,10 @@ Matrix PCA::fit_transform(Matrix X) {
 }
 
 // Method to get the Covariance Matrix
-Matrix PCA::get_covariance() { return Sigma; }
+inline Matrix PCA::get_covariance() { return Sigma; }
 
 // Method to get the Precision Matrix
-Matrix PCA::get_precision() { return matrix.inverse(Sigma); }
+inline Matrix PCA::get_precision() { return matrix.inverse(Sigma); }
 
 // Method to print the PCA object parameters in json format
 void PCA::get_params() {
@@ -71,7 +72,7 @@ Matrix PCA::inverse_transform(Matrix Z) {
     return X_recovered;
 }
 
-double PCA::score(Matrix X) { return matrix.mean(score_samples(X), "row")(0, 0); }
+inline double PCA::score(Matrix X) { return matrix.mean(score_samples(X), "row")(0, 0); }
 
 Matrix PCA::score_samples(Matrix X) {
     Matrix Xr = X - matrix.mean(X, "column");

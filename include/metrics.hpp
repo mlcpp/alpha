@@ -16,7 +16,7 @@ class metrics {
     long double mean_absolute_error(Matrix, Matrix);
     long double mean_squared_error(Matrix, Matrix);
     double r2_score(Matrix, Matrix);
-
+    ~metrics() {}
 } metrics;
 
 // Classification metrics

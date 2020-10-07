@@ -7,6 +7,7 @@ class ModelSelection {
   private:
   public:
     std::tuple<Matrix, Matrix, Matrix, Matrix> train_test_split(Matrix, Matrix, int, float, float);
+    ~ModelSelection() {}
 } model_selection;
 
 std::tuple<Matrix, Matrix, Matrix, Matrix>

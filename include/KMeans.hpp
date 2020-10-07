@@ -23,6 +23,7 @@ class KMeans {
     double score(Matrix);
     void set_params(int, int);
     Matrix get_centroid();
+    ~KMeans() {}
 };
 
 // Constructor
@@ -45,10 +46,7 @@ void KMeans::fit(Matrix X) {
 }
 
 // Method to calculate the score of the KMeans model equal to negative of the cost function
-long double KMeans::score() {
-    long double score = -1 * J;
-    return score;
-}
+inline long double KMeans::score() { return -1 * J; }
 
 // Method to classify new points into one of ready k clusters
 Matrix KMeans::predict(Matrix X) {
@@ -68,7 +66,7 @@ Matrix KMeans::fit_predict(Matrix X) {
 }
 
 // Method to return a Matrix of centoids
-Matrix KMeans::get_centroid() { return C; }
+inline Matrix KMeans::get_centroid() { return C; }
 
 // Method to print the KMeans object parameters in json format
 void KMeans::get_params() {

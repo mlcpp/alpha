@@ -22,6 +22,7 @@ class Lasso : private Preprocessing {
     Matrix predict(Matrix);
     double score(Matrix, Matrix);
     void set_params(double, bool, int);
+    ~Lasso() {}
 };
 
 // Constructor

@@ -19,6 +19,7 @@ class Ridge : private Preprocessing {
     Matrix predict(Matrix);
     double score(Matrix, Matrix);
     void set_params(double, bool, bool, int, double);
+    ~Ridge() {}
 };
 
 // Constructor

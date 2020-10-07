@@ -19,6 +19,8 @@ class LinearRegression : private Preprocessing {
     Matrix predict(Matrix);
     double score(Matrix, Matrix);
     void set_params(bool, bool, int, double);
+
+    ~LinearRegression() {}
 };
 
 // Constructor
