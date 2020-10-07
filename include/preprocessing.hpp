@@ -10,6 +10,7 @@ class Preprocessing {
 
   public:
     Matrix normalize(Matrix, std::string);
+    ~Preprocessing() {}
 };
 
 Matrix Preprocessing::normalize(Matrix mat, std::string dim) {

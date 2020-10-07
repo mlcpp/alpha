@@ -19,6 +19,7 @@ class KNeighborsClassifier {
     Matrix predict(Matrix);
     double score(Matrix, Matrix);
     void set_params(int);
+    ~KNeighborsClassifier() {}
 };
 
 // Constructor
