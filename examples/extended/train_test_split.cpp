@@ -1,14 +1,13 @@
 #include <Matrix.hpp>
 #include <model_selection.hpp>
 
-/* Example program
+// Example program
 
-Read csv files to get a Matrix object.
-Slice the Matrix object according to our needs.
-Then we can split our dataset using train_test_split.
-*/
+// Read csv files to get a Matrix object.
+// Slice the Matrix object according to our needs.
+// Then we can split our dataset using train_test_split.
 int main() {
-    Matrix mat = read_csv("./datasets/diabetes/diabetes.csv");
+    Matrix mat = read_csv("./datasets/blobs/blobs.csv");
 
     Matrix X = mat.slice(1, 30, 0, mat.col_length() - 1);
     X.to_double();

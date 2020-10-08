@@ -3,13 +3,12 @@
 #include <preprocessing.hpp>
 namespace plt = matplotlibcpp;
 
-/* Example program
+// Example program
 
-Read csv files to get a Matrix object.
-Slice the Matrix object according to our needs.
-Normalize the Matrix object using normalize() method.
-The difference between normalized and unnormalized datasets is visually depicted.
-*/
+// Read csv files to get a Matrix object.
+// Slice the Matrix object according to our needs.
+// Normalize the Matrix object using normalize() method.
+// The difference between normalized and unnormalized datasets is visually depicted.
 int main() {
     Matrix mat = read_csv("./datasets/blobs_norm/blobs_norm.csv");
     mat = mat.slice(1, mat.row_length(), 0, mat.col_length() - 1);

@@ -10,6 +10,7 @@ class ModelSelection {
     ~ModelSelection() {}
 } model_selection;
 
+// Method to split the dataset into training and test sets
 std::tuple<Matrix, Matrix, Matrix, Matrix>
 ModelSelection::train_test_split(Matrix X, Matrix y, int random_state = -1, float train_size = 0.75,
                                  float test_size = 0.25) {

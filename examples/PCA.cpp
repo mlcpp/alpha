@@ -6,8 +6,8 @@
 // Example program
 
 // Read csv files to get a Matrix object.
-// Slice the Matrix object to remove header.
-// Fitting and transforming the dataset using PCA model.
+// Slice the Matrix object to remove the header.
+// Fitting and transforming the dataset using the PCA model.
 int main() {
     // Load the dataset
     Matrix mat = read_csv("./datasets/blobs_pca/blobs_pca.csv");

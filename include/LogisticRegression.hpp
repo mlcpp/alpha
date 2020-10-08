@@ -106,7 +106,7 @@ Matrix LogisticRegression::predict(Matrix X) {
     return Y_pred;
 }
 
-// Method to predict logarithm of probablility estimates using the Logistic Regression model
+// Method to predict logarithm of probability estimates using the Logistic Regression model
 Matrix LogisticRegression::predict_log_proba(Matrix X) {
     assert(("Fit the model before predicting.", is_fit));
 
@@ -118,7 +118,7 @@ Matrix LogisticRegression::predict_log_proba(Matrix X) {
     return Y_pred;
 }
 
-// Method to predict probablility estimates using the Logistic Regression model
+// Method to predict probability estimates using the Logistic Regression model
 Matrix LogisticRegression::predict_proba(Matrix X) {
     assert(("Fit the model before predicting.", is_fit));
 

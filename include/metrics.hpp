@@ -113,7 +113,7 @@ long double metrics::mean_squared_error(Matrix y_true, Matrix y_pred) {
     return score;
 }
 
-// Return R^2 (coeffieceint of determination) score
+// Return R^2 (coefficient of determination) score
 double metrics::r2_score(Matrix y_true, Matrix y_pred) {
     double y_mean = ((matrix.mean(y_true, "column"))(0, 0));
     double residual_sum_of_squares =
