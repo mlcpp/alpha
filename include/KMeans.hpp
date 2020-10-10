@@ -18,9 +18,8 @@ class KMeans {
     void fit(Matrix);
     Matrix fit_predict(Matrix);
     void get_params();
-    long double score();
     Matrix predict(Matrix);
-    double score(Matrix);
+    long double score();
     void set_params(int, int);
     Matrix get_centroid();
     ~KMeans() {}
@@ -45,8 +44,21 @@ void KMeans::fit(Matrix X) {
     is_fit = true;
 }
 
-// Method to calculate the score of the KMeans model equal to negative of the cost function
-inline long double KMeans::score() { return -1 * J; }
+// Method to compute k optimal centroids and classify new points into k clusters
+Matrix KMeans::fit_predict(Matrix X) {
+    fit(X);
+    Matrix Y_pred = predict(X);
+    return Y_pred;
+}
+
+// Method to print the KMeans object parameters in json format
+void KMeans::get_params() {
+    std::cout << std::boolalpha;
+    std::cout << "[" << std::endl;
+    std::cout << "\t \"n_clusters\": \"" << n_clusters << "\"," << std::endl;
+    std::cout << "\t \"epochs\": \"" << epochs << "\"" << std::endl;
+    std::cout << "]" << std::endl;
+}
 
 // Method to classify new points into one of ready k clusters
 Matrix KMeans::predict(Matrix X) {
@@ -58,30 +70,17 @@ Matrix KMeans::predict(Matrix X) {
     return Z;
 }
 
-// Method to compute k optimal centroids and classify new points into k clusters
-Matrix KMeans::fit_predict(Matrix X) {
-    fit(X);
-    Matrix Y_pred = predict(X);
-    return Y_pred;
-}
-
-// Method to return a Matrix of centoids
-inline Matrix KMeans::get_centroid() { return C; }
-
-// Method to print the KMeans object parameters in json format
-void KMeans::get_params() {
-    std::cout << std::boolalpha;
-    std::cout << "[" << std::endl;
-    std::cout << "\t \"n_clusters\": \"" << n_clusters << "\"," << std::endl;
-    std::cout << "\t \"epochs\": \"" << epochs << "\"" << std::endl;
-    std::cout << "]" << std::endl;
-}
+// Method to calculate the score of the KMeans model equal to negative of the cost function
+inline long double KMeans::score() { return -1 * J; }
 
 // Method to set the KMeans object parameters
 void KMeans::set_params(int n_clusters = 3, int epochs = 100) {
     this->n_clusters = n_clusters;
     this->epochs = epochs;
 }
+
+// Method to return a Matrix of centoids
+inline Matrix KMeans::get_centroid() { return C; }
 
 // Helper methods
 

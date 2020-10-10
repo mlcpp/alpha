@@ -13,6 +13,7 @@ class Preprocessing {
     ~Preprocessing() {}
 };
 
+// Method to normalize the dataset
 Matrix Preprocessing::normalize(Matrix mat, std::string dim) {
     if (!if_mean) {
         mean = matrix.mean(mat, dim);

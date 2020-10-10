@@ -5,16 +5,16 @@
 #include <model_selection.hpp>
 namespace plt = matplotlibcpp;
 
-/* Example program
+// Example program
 
-Read csv files to get a Matrix object.
-Slice the Matrix object to a suitable size.
-Run Ridge Regression, print scores and plot predictions in 3 ways:
+// Read csv files to get a Matrix object.
+// Slice the Matrix object to a suitable size.
+// Run Ridge Regression, print scores and plot predictions in 3 ways:
 
-1. Gradient Descent without Normalization
-2. Gradient Descent with Normalization
-3. Ordinary Least Squares
-*/
+// 1. Gradient Descent without Normalization
+// 2. Gradient Descent with Normalization
+// 3. Ordinary Least Squares
+
 int main() {
     // Specify backend renderer for matplotlib
     plt::backend("GTK3Agg");

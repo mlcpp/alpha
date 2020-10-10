@@ -45,7 +45,7 @@ void PCA::fit(Matrix X) {
     is_fit = true;
 }
 
-// Method to fit the PCA model and then tranform given Matrix object
+// Method to fit the PCA model and then transform given Matrix object
 Matrix PCA::fit_transform(Matrix X) {
     fit(X);
     Matrix Z = transform(X);
@@ -55,9 +55,6 @@ Matrix PCA::fit_transform(Matrix X) {
 // Method to get the Covariance Matrix
 inline Matrix PCA::get_covariance() { return Sigma; }
 
-// Method to get the Precision Matrix
-inline Matrix PCA::get_precision() { return matrix.inverse(Sigma); }
-
 // Method to print the PCA object parameters in json format
 void PCA::get_params() {
     std::cout << std::boolalpha;
@@ -66,14 +63,19 @@ void PCA::get_params() {
     std::cout << "]" << std::endl;
 }
 
-// Method to tranform the data back to original dimensions
+// Method to get the Precision Matrix
+inline Matrix PCA::get_precision() { return matrix.inverse(Sigma); }
+
+// Method to transform the data back to original dimensions
 Matrix PCA::inverse_transform(Matrix Z) {
     Matrix X_recovered = (matrix.matmul(Ureduce, Z.T())).T();
     return X_recovered;
 }
 
+// Method to calculate score of PCA model
 inline double PCA::score(Matrix X) { return matrix.mean(score_samples(X), "row")(0, 0); }
 
+// Method to calculate score of each sample
 Matrix PCA::score_samples(Matrix X) {
     Matrix Xr = X - matrix.mean(X, "column");
     int n_features = X.col_length();
@@ -89,6 +91,7 @@ Matrix PCA::score_samples(Matrix X) {
 // Method to set the PCA object parameters
 void PCA::set_params(int n_components = -1) { this->n_components = n_components; }
 
+// Method to transform the given Matrix object
 Matrix PCA::transform(Matrix X) {
     assert(("Fit the model before predicting.", is_fit));
 

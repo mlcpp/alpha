@@ -18,7 +18,6 @@ class Lasso : private Preprocessing {
     Lasso(double, bool, int);
     void fit(Matrix, Matrix);
     void get_params();
-    void path();
     Matrix predict(Matrix);
     double score(Matrix, Matrix);
     void set_params(double, bool, int);
