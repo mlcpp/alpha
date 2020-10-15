@@ -36,7 +36,6 @@ int main() {
               matrix.slice_select(X_train, Y_train, 1.0, 1).get_col(0), "g^");
     plt::plot(matrix.slice_select(X_train, Y_train, 2.0, 0).get_col(0),
               matrix.slice_select(X_train, Y_train, 2.0, 1).get_col(0), "bD");
-    plt::save("./build/plots/KNeighbors Known Dataset.png");
 
     // create KMeans object with k as parameters
     KNeighborsClassifier knn(0);
@@ -49,58 +48,47 @@ int main() {
     std::vector<double> Px = {-1.1819949309545112};
     std::vector<double> Py = {3.568805376115622};
     plt::plot(Px, Py, "ms");
+    plt::save("./build/plots/KNeighbors Known Dataset.png");
     plt::show();
     for (int i = 1; i < 4; i++) {
         knn.set_params(i);
         Matrix label = knn.kneighbors(P);
         std::cout << "For K = " << i << " : ";
+
+        // plot training dataset
+        plt::figure_size(800, 600);
+        plt::named_plot("Known Red", matrix.slice_select(X_train, Y_train, 0.0, 0).get_col(0),
+                        matrix.slice_select(X_train, Y_train, 0.0, 1).get_col(0), "ro");
+        plt::named_plot("Known Green", matrix.slice_select(X_train, Y_train, 1.0, 0).get_col(0),
+                        matrix.slice_select(X_train, Y_train, 1.0, 1).get_col(0), "g^");
+        plt::named_plot("Known Blue", matrix.slice_select(X_train, Y_train, 2.0, 0).get_col(0),
+                        matrix.slice_select(X_train, Y_train, 2.0, 1).get_col(0), "bD");
         switch ((int)label(0, 0)) {
         case 0:
             std::cout << "Red" << std::endl;
-            // plot training dataset
-            plt::figure_size(800, 600);
             plt::title(
                 "KNeighbors Known Dataset (Red, Green, Blue) with Unknown Point predicted (Red)");
-            plt::plot(matrix.slice_select(X_train, Y_train, 0.0, 0).get_col(0),
-                      matrix.slice_select(X_train, Y_train, 0.0, 1).get_col(0), "ro");
-            plt::plot(matrix.slice_select(X_train, Y_train, 1.0, 0).get_col(0),
-                      matrix.slice_select(X_train, Y_train, 1.0, 1).get_col(0), "g^");
-            plt::plot(matrix.slice_select(X_train, Y_train, 2.0, 0).get_col(0),
-                      matrix.slice_select(X_train, Y_train, 2.0, 1).get_col(0), "bD");
+            plt::named_plot("Predicted red", Px, Py, "rP");
+            plt::legend();
             plt::save("./build/plots/KNeighbors Known Dataset-Red.png");
-            plt::plot(Px, Py, "rs");
             plt::show();
             break;
         case 1:
             std::cout << "Green" << std::endl;
-            // plot training dataset
-            plt::figure_size(800, 600);
             plt::title(
                 "KNeighbors Known Dataset (Red, Green, Blue) with Unknown Point predicted (Green)");
-            plt::plot(matrix.slice_select(X_train, Y_train, 0.0, 0).get_col(0),
-                      matrix.slice_select(X_train, Y_train, 0.0, 1).get_col(0), "ro");
-            plt::plot(matrix.slice_select(X_train, Y_train, 1.0, 0).get_col(0),
-                      matrix.slice_select(X_train, Y_train, 1.0, 1).get_col(0), "g^");
-            plt::plot(matrix.slice_select(X_train, Y_train, 2.0, 0).get_col(0),
-                      matrix.slice_select(X_train, Y_train, 2.0, 1).get_col(0), "bD");
+            plt::named_plot("Predicted green", Px, Py, "gP");
+            plt::legend();
             plt::save("./build/plots/KNeighbors Known Dataset-Green.png");
-            plt::plot(Px, Py, "gs");
             plt::show();
             break;
         case 2:
             std::cout << "Blue" << std::endl;
-            // plot training dataset
-            plt::figure_size(800, 600);
             plt::title(
                 "KNeighbors Known Dataset (Red, Green, Blue) with Unknown Point predicted (Blue)");
-            plt::plot(matrix.slice_select(X_train, Y_train, 0.0, 0).get_col(0),
-                      matrix.slice_select(X_train, Y_train, 0.0, 1).get_col(0), "ro");
-            plt::plot(matrix.slice_select(X_train, Y_train, 1.0, 0).get_col(0),
-                      matrix.slice_select(X_train, Y_train, 1.0, 1).get_col(0), "g^");
-            plt::plot(matrix.slice_select(X_train, Y_train, 2.0, 0).get_col(0),
-                      matrix.slice_select(X_train, Y_train, 2.0, 1).get_col(0), "bD");
+            plt::named_plot("Predicted blue", Px, Py, "bP");
+            plt::legend();
             plt::save("./build/plots/KNeighbors Known Dataset-Blue.png");
-            plt::plot(Px, Py, "bs");
             plt::show();
             break;
         }
