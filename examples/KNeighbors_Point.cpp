@@ -48,7 +48,7 @@ int main() {
     std::vector<double> Px = {-1.1819949309545112};
     std::vector<double> Py = {3.568805376115622};
     plt::plot(Px, Py, "ms");
-    plt::save("./build/plots/KNeighbors Known Dataset.png");
+    plt::save("./build/plots/KNeighbors Point Known Dataset.png");
     plt::show();
     for (int i = 1; i < 4; i++) {
         knn.set_params(i);
@@ -70,7 +70,7 @@ int main() {
                 "KNeighbors Known Dataset (Red, Green, Blue) with Unknown Point predicted (Red)");
             plt::named_plot("Predicted red", Px, Py, "rP");
             plt::legend();
-            plt::save("./build/plots/KNeighbors Known Dataset-Red.png");
+            plt::save("./build/plots/KNeighbors Point Known Dataset-Red.png");
             plt::show();
             break;
         case 1:
@@ -79,7 +79,7 @@ int main() {
                 "KNeighbors Known Dataset (Red, Green, Blue) with Unknown Point predicted (Green)");
             plt::named_plot("Predicted green", Px, Py, "gP");
             plt::legend();
-            plt::save("./build/plots/KNeighbors Known Dataset-Green.png");
+            plt::save("./build/plots/KNeighbors Point Known Dataset-Green.png");
             plt::show();
             break;
         case 2:
@@ -88,7 +88,7 @@ int main() {
                 "KNeighbors Known Dataset (Red, Green, Blue) with Unknown Point predicted (Blue)");
             plt::named_plot("Predicted blue", Px, Py, "bP");
             plt::legend();
-            plt::save("./build/plots/KNeighbors Known Dataset-Blue.png");
+            plt::save("./build/plots/KNeighbors Point Known Dataset-Blue.png");
             plt::show();
             break;
         }
