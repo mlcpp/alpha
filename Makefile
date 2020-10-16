@@ -9,8 +9,6 @@ CPP_FLAGS = -std=c++17 -g -o
 # create build directory
 CREATE_DIR : $(shell mkdir -p ./build && mkdir -p ./build/plots)
 
-ext: make -f Makefile.ext
-
 # compile /examples dir with options to compile single
 %: $(CREATE_DIR) ./examples/%.cpp
 	@# @echo compiling $@.cpp
